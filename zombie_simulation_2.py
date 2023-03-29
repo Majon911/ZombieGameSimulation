@@ -32,8 +32,8 @@ class city:
 class citizen:
     def __init__(self, id, city):
         self.id = id
-        self.infected = None
-        self.zombie_id = None
+        self.alive = True
+        self.infected = False
         self.city = city
         self.city.healthy_queue.append(self)
 
@@ -41,11 +41,14 @@ class citizen:
     def zombify(self):
         if not self.infected:
             print("Citizen", self.id, "has been infected! ")
+            print(self.city.name, "is in danger." )
+            self.infected = True
             self.city.zombie_queue.append(self)
             self.city.healthy_queue.remove(self)
 
-
-
+    def death(self):
+        if self.alive:
+            self.alive = False
 
 
 
@@ -72,11 +75,33 @@ def day_sim(day_number):
 
 
     infected = random.randint(lower, upper)
-    # print(infected)
     c = city.healthy_queue[infected]
     c.zombify()
+    # city_checker()
 
 
+def city_checker():
+    y = input("\n'M' to check Mackers City \n'N' to check Nogales Village \n'G' to check Gulans Town \n<ENTER> to leave \n").upper()
+    if y == 'M':
+        print("\nMACKERS CITY: ")
+        print("Uninfected Citizens", len(MackersCity.healthy_queue))
+        print("Zombies:", len(MackersCity.zombie_queue))
+        city_checker()
+    elif y == 'N':
+        print("\nNOGALES VILLAGE: ")
+        print("Uninfected Citizens", len(NogalesVillage.healthy_queue))
+        print("Zombies:", len(NogalesVillage.zombie_queue))
+        city_checker()
+    elif y == 'G':
+        print("\nGULANS TOWN: ")
+        print("Uninfected Citizens", len(GulansTown.healthy_queue))
+        print("Zombies:", len(GulansTown.zombie_queue))
+        city_checker()
+    elif y == '':
+        pass
+    else:
+        print("Invalid Input. ")
+        city_checker()
 
 
 
@@ -138,6 +163,9 @@ def simulation():
         scoreboard = statistics(total_zombies, days, deaths)
         scoreboard.report()
 
+        city_checker()
+
+
     except:
         if KeyboardInterrupt:
             raise
@@ -146,5 +174,4 @@ def simulation():
 
 
 simulation()
-
 
