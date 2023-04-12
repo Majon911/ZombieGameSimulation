@@ -84,59 +84,10 @@ def day_sim(day_number):
     c.zombify()
     
     
-#def starvation(city_population):
-
-class City:
-    def __init__(self, name, population):
-        self.name = name
-        self.population = population
-
-if __name__ == '__main__':
-    MackersCity = City("Mackers City", 1000)
-    NogalesVillage = City("Nogales Village", 500)
-    GulansTown = City("Gulans Town", 750)
-
     
-def starvation(city):
-    death_probability = 0.10
-    starving_citizens = round(city.population * death_probability)
-    dead_citizens = random.sample(city.healthy_queue, starving_citizens)
-    for citizen in dead_citizens:
-        city.healthy_queue.remove(citizen)
-        city.zombie_queue.append(citizen)
-        print("Citizen {} in {} has died of starvation.".format(citizen.id, city.name))
-
-
-def city_checker(city):
-    print("\n{}:".format(city.name))
-    print("Uninfected Citizens: ", len(city.healthy_queue))
-    print("Zombies: ", len(city.zombie_queue))
-    starvation(city)
-
-if __name__ == '__main__':
-    MackersCity = City("Mackers City", 1000)
-    NogalesVillage = City("Nogales Village", 500)
-    GulansTown = City("Gulans Town", 750)
-
-    while True:
-        y = input(
-            "\n'M' to check Mackers City \n'N' to check Nogales Village \n'G' to check Gulans Town \n<ENTER> to leave \n").upper()
-
-        if y == 'M':
-            city_checker(MackersCity)
-
-        elif y == 'N':
-            city_checker(NogalesVillage)
-
-        elif y == 'G':
-            city_checker(GulansTown)
-
-        elif y == '':
-            break
-
-        else:
-            print("Invalid Input. ")
-            continue   
+#def starvation (working on it there were still some errors):
+   
+    
     
     
     # city_checker()
