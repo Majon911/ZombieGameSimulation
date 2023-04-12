@@ -86,54 +86,45 @@ def day_sim(day_number):
     
 #def starvation(city_population):
 
-def starvation(city_population):
+def starvation(city):
     death_probability = 0.10
+    starving_citizens = round(city.population * death_probability)
+    dead_citizens = random.sample(city.healthy_queue, starving_citizens)
+    for citizen in dead_citizens:
+        city.healthy_queue.remove(citizen)
+        city.zombie_queue.append(citizen)
+        print("Citizen {} in {} has died of starvation.".format(citizen, city.name))
 
-    starving_citizens = round(city_population * death_probability)
+def city_checker(city):
+    print("\n{}:".format(city.name))
+    print("Uninfected Citizens: ", len(city.healthy_queue))
+    print("Zombies: ", len(city.zombie_queue))
+    starvation(city)
 
-    for i in range(starving_citizens):
-        citizen = random.randint(1, city_population)
+if __name__ == '__main__':
+    MackersCity = City("Mackers City", 1000)
+    NogalesVillage = City("Nogales Village", 500)
+    GulansTown = City("Gulans Town", 750)
 
-        print("Citizen {} in this city has died of starvation.".format(citizen))
+    while True:
+        y = input(
+            "\n'M' to check Mackers City \n'N' to check Nogales Village \n'G' to check Gulans Town \n<ENTER> to leave \n").upper()
 
+        if y == 'M':
+            city_checker(MackersCity)
 
-def city_checker():
-    y = input(
-        "\n'M' to check Mackers City \n'N' to check Nogales Village \n'G' to check Gulans Town \n<ENTER> to leave \n").upper()
+        elif y == 'N':
+            city_checker(NogalesVillage)
 
-    if y == 'M':
-        print("\nMACKERS CITY: ")
-        print("Uninfected Citizens", len(MackersCity.healthy_queue))
-        print("Zombies:", len(MackersCity.zombie_queue))
+        elif y == 'G':
+            city_checker(GulansTown)
 
-        starvation(MackersCity.population)
+        elif y == '':
+            break
 
-        city_checker()
-
-    elif y == 'N':
-        print("\nNOGALES VILLAGE: ")
-        print("Uninfected Citizens", len(NogalesVillage.healthy_queue))
-        print("Zombies:", len(NogalesVillage.zombie_queue))
-
-        starvation(NogalesVillage.population)
-
-        city_checker()
-
-    elif y == 'G':
-        print("\nGULANS TOWN: ")
-        print("Uninfected Citizens", len(GulansTown.healthy_queue))
-        print("Zombies:", len(GulansTown.zombie_queue))
-
-        starvation(GulansTown.population)
-
-        city_checker()
-
-    elif y == '':
-        pass
-
-    else:
-        print("Invalid Input. ")
-        city_checker()   
+        else:
+            print("Invalid Input. ")
+            continue   
     
     
     # city_checker()
