@@ -1,5 +1,6 @@
 # zombie_simulation.py
 import random
+import militaryclass as mc
 
 total_population = 0
 total_zombies = 0
@@ -8,10 +9,11 @@ deaths = 0
 
 
 class statistics:
-    def __init__(self, total_infected, time_elapsed, total_deaths):
+    def __init__(self, total_infected, time_elapsed, total_deaths, total_military_alive):
         self.total_infected = total_infected
         self.time_elapsed = time_elapsed
         self.total_deaths = total_deaths
+        self.total_military_alive = total_military_alive
 
     def report(self):
         print()
@@ -19,6 +21,7 @@ class statistics:
         print("\tTime Elapsed: ", self.time_elapsed)
         print("\tTotal Infected: ", self.total_infected)
         print("\tTotal Deaths: ", self.total_deaths)
+        print('\tTotal military alive: ', self.total_military_alive)
 
 
 class city:
@@ -27,6 +30,8 @@ class city:
         self.population = population
         self.healthy_queue = []
         self.zombie_queue = []
+        self.active_military_personnel = []
+        self.dead_military_personnel = []
 
 
 class citizen:
@@ -126,6 +131,23 @@ def simulation():
         for i in range(1501, 2001):
             c = citizen(i, NogalesVillage)
 
+        # Instantiating the military
+        for i in range(1, 51):
+            m = mc.Military(i, "Solider", random.randrange(1, 6))
+            city.active_military_personnel.append(m)
+        for i in range(1, 11):
+            m = mc.Military(i, "Tank", random.randrange(1, 4))
+            city.active_military_personnel.append(m)
+        for i in range(1, 6):
+            m = mc.Military(i, "Bomber", random.randrange(1, 3))
+            city.active_military_personnel.append(m)
+        for i in range(1, 21):
+            m = mc.Military(i, "Solider Armoured", random.randrange(1, 6))
+            city.active_military_personnel.append(m)
+        for i in range(1):
+            m = mc.Military(i, "Tactical Nuke", 1)
+            city.active_military_personnel.append(m)
+
 
         ### STARTING SIMULATION
         print("Welcome to our zombie simulation. ")
@@ -160,7 +182,10 @@ def simulation():
         for city in map:
             total_zombies += len(city.zombie_queue)
 
-        scoreboard = statistics(total_zombies, days, deaths)
+        for city in map:
+            total_military += len(city.active_military_personnel)
+
+        scoreboard = statistics(total_zombies, days, deaths, total_military)
         scoreboard.report()
 
         city_checker()
