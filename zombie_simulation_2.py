@@ -85,8 +85,7 @@ def day_sim(day_number):
     
     
     
-#def starvation (working on it there were still some errors):
-   
+#def starvation (working on it. There are still some errors)
     
     
     
