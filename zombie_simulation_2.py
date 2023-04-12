@@ -86,6 +86,17 @@ def day_sim(day_number):
     
 #def starvation(city_population):
 
+class City:
+    def __init__(self, name, population):
+        self.name = name
+        self.population = population
+
+if __name__ == '__main__':
+    MackersCity = City("Mackers City", 1000)
+    NogalesVillage = City("Nogales Village", 500)
+    GulansTown = City("Gulans Town", 750)
+
+    
 def starvation(city):
     death_probability = 0.10
     starving_citizens = round(city.population * death_probability)
