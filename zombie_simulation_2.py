@@ -93,7 +93,8 @@ def starvation(city):
     for citizen in dead_citizens:
         city.healthy_queue.remove(citizen)
         city.zombie_queue.append(citizen)
-        print("Citizen {} in {} has died of starvation.".format(citizen, city.name))
+        print("Citizen {} in {} has died of starvation.".format(citizen.id, city.name))
+
 
 def city_checker(city):
     print("\n{}:".format(city.name))
