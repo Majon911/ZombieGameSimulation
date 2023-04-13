@@ -88,7 +88,7 @@ def day_sim(day_number):
 #def non_zombie_fatalities
 
 def non_zombie_fatalities():
-    deaths = ["starvation"] * 1 + ["food poisoning"] * 2 + ["dehydration"] * 3 + ["suicide"] * 5 + ["unknown causes"] * 5
+    deaths = ["starvation"] * 1 + ["food poisoning"] * 2 + ["dehydration"] * 5 + ["suicide"] * 5 + ["unknown causes"] * 5
     return random.choice(deaths)
 
 def death(city_population):
@@ -103,7 +103,7 @@ def death(city_population):
         elif probability < 0.02:
             death_citizens = 1
             death_type = "food poisoning"
-        elif probability < 0.03:
+        elif probability < 0.05:
             death_citizens = 1
             death_type = "dehydration"
         elif probability < 0.05:
