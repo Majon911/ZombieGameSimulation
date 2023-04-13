@@ -85,7 +85,7 @@ def day_sim(day_number):
     
     
     
-#def starvation (working on it. There are still some errors)
+#def non_zombie_fatalities (working on it. still finishing some stuff "Sergio")
     
     
     
