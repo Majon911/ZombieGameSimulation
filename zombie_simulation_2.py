@@ -85,35 +85,79 @@ def day_sim(day_number):
     
     
     
-#def non_zombie_fatalities (working on it. still finishing some stuff "Sergio")
+    
+#def non_zombie_fatalities
+
+def non_zombie_fatalities():
+    deaths = ["starvation"] * 1 + ["food poisoning"] * 2 + ["dehydration"] * 3 + ["suicide"] * 5 + ["unknown causes"] * 5
+    return random.choice(deaths)
+
+
+def death(city_population):
+    death_citizens = 0
+
+    while death_citizens < 1:
+        probability = random.random()
+
+        if probability < 0.01:
+            death_citizens = 1
+            death_type = "starvation"
+        elif probability < 0.02:
+            death_citizens = 1
+            death_type = "food poisoning"
+        elif probability < 0.03:
+            death_citizens = 1
+            death_type = "dehydration"
+        elif probability < 0.05:
+            death_citizens = 1
+            death_type = "suicide"
+        elif probability < 0.05:
+            death_citizens = 1
+            death_type = "unknown causes"
+
+    for i in range(death_citizens):
+        citizen = random.randint(1, city_population)
+        print("Citizen {} in this city has died of {}.".format(citizen, death_type))
     
     
     
-    # city_checker()
+    
+    # city_checker() "I modified it adding a new variable (death_count) and adding the function (non_zombie_fatalities)" "Sergio"
 
 def city_checker():
     y = input("\n'M' to check Mackers City \n'N' to check Nogales Village \n'G' to check Gulans Town \n<ENTER> to leave \n").upper()
     if y == 'M':
         print("\nMACKERS CITY: ")
-        print("Uninfected Citizens", len(MackersCity.healthy_queue))
-        print("Zombies:", len(MackersCity.zombie_queue))
+        healthy_count = len(MackersCity.healthy_queue)
+        zombie_count = len(MackersCity.zombie_queue)
+        death_count = len(MackersCity.death_queue)
+        print("Uninfected Citizens:", healthy_count)
+        print("Zombies:", zombie_count)
+        print("Non-zombie Fatalities:", death_count)
         city_checker()
     elif y == 'N':
         print("\nNOGALES VILLAGE: ")
-        print("Uninfected Citizens", len(NogalesVillage.healthy_queue))
-        print("Zombies:", len(NogalesVillage.zombie_queue))
+        healthy_count = len(NogalesVillage.healthy_queue)
+        zombie_count = len(NogalesVillage.zombie_queue)
+        death_count = len(NogalesVillage.death_queue)
+        print("Uninfected Citizens:", healthy_count)
+        print("Zombies:", zombie_count)
+        print("Non-zombie Fatalities:", death_count)
         city_checker()
     elif y == 'G':
         print("\nGULANS TOWN: ")
-        print("Uninfected Citizens", len(GulansTown.healthy_queue))
-        print("Zombies:", len(GulansTown.zombie_queue))
+        healthy_count = len(GulansTown.healthy_queue)
+        zombie_count = len(GulansTown.zombie_queue)
+        death_count = len(GulansTown.death_queue)
+        print("Uninfected Citizens:", healthy_count)
+        print("Zombies:", zombie_count)
+        print("Non-zombie Fatalities:", death_count)
         city_checker()
     elif y == '':
         pass
     else:
         print("Invalid Input. ")
         city_checker()
-
 
 
 
