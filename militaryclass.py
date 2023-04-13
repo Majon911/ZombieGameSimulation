@@ -1,6 +1,4 @@
 import random
-import zombie_simulation_2 as main
-
 
 class Military:
 
