@@ -81,8 +81,7 @@ def day_sim(day_number):
 
     infected = random.randint(lower, upper)
     c = city.healthy_queue[infected]
-    c.zombify()
-    
+    c.zombify()  
     
     
     
