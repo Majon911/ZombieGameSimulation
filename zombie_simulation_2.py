@@ -106,10 +106,10 @@ def death(city_population):
         elif probability < 0.05:
             death_citizens = 1
             death_type = "dehydration"
-        elif probability < 0.05:
+        elif probability < 0.03:
             death_citizens = 1
             death_type = "suicide"
-        elif probability < 0.05:
+        elif probability < 0.02:
             death_citizens = 1
             death_type = "unknown causes"
 
