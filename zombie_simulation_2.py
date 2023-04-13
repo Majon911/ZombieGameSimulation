@@ -92,7 +92,6 @@ def non_zombie_fatalities():
     deaths = ["starvation"] * 1 + ["food poisoning"] * 2 + ["dehydration"] * 3 + ["suicide"] * 5 + ["unknown causes"] * 5
     return random.choice(deaths)
 
-
 def death(city_population):
     death_citizens = 0
 
