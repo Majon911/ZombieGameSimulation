@@ -122,7 +122,7 @@ def death(city_population):
     
     
     
-    # city_checker() "I modified it adding a new variable (death_count) and adding the function (non_zombie_fatalities)" "Sergio"
+    # city_checker() "I modified it adding a new variable (death_count) however it has to be changed in the future because there will be 2 (for zombies and humans) and adding the function (non_zombie_fatalities)" "Sergio"
 
 def city_checker():
     y = input("\n'M' to check Mackers City \n'N' to check Nogales Village \n'G' to check Gulans Town \n<ENTER> to leave \n").upper()
