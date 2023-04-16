@@ -21,10 +21,6 @@ class Military:
         # if self.type == "Solider Armoured":
         #     if chance == 1 or 5 or 10 or 15 or 20 or 25 or 30:
         #         map.zombie_queue.pop(0)
-        # if self.type == "Tactical Nuke":
-        #     if len(map.zombie_queue)/(len(map.zombie_queue)+len(map.healthy_queue)) > 0.95:
-        #         print(f"City: {city.name}, has been TACTICAL NUKED by the MILITARY!!!")
-        #         map.remove(city.name)
 
     def zombify(self):
         pass
