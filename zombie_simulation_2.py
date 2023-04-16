@@ -1,5 +1,7 @@
 # zombie_simulation.py
 import random
+import time
+import webbrowser
 import militaryclass as mc
 
 total_population = 0
@@ -7,6 +9,28 @@ total_zombies = 0
 days = 0
 deaths = 0
 
+
+class Nuke:
+    def __init__(self):
+        self.deployed = False
+
+    def check_pop(self):
+        while not self.deployed:
+            for cities in map:
+                if (len(cities.zombie_queue)/(len(cities.zombie_queue)+len(cities.healthy_queue))) > 0.95:
+                    print(f"City: {cities.name} is in a horrible situation, zombies make up more then 95% of the population.")
+                    print("Military proposes operation Oppenheimer! One time choice!")
+                    nuke_q = str(input("Do you want to use a tactical nuke? Y/N"))
+                    if nuke_q == "Y":
+                        webbrowser.open('https://www.youtube.com/watch?v=bryWiNw9Rzg')
+                        print(f"NUCLEAR BOMB DEPLOYED IN {cities.name}")
+                        self.deployed = True
+                        # To be worked on nuke wipe out thread STOP
+                        map.remove(cities)
+                    elif nuke_q == "N":
+                        time.sleep(15)
+                    else:
+                        print("Wrong input, try again!")
 
 class statistics:
     def __init__(self, total_infected, time_elapsed, total_deaths, total_military_alive):
@@ -230,6 +254,7 @@ def simulation():
         for city in map:
             total_zombies += len(city.zombie_queue)
 
+        total_military = 0
         for city in map:
             total_military += len(city.active_military_personnel)
 
