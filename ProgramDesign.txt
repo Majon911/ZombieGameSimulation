@@ -1,0 +1,54 @@
+Zombie Game Simulation Design
+
+1. Period of Simulation
+The threads will be turned on and off with new updated parameters on a daily bases as selected by the player. This means a series of actions based on threading will
+be happeaning per period, the queues with game objects will then update themselves, threads will finish their operations a a player will be posed with a question if
+he or she wants to continue.
+
+Note: There need to be daily limitations when it comes to the spread of the virus or the tempo of healing or military action limited inside the classes and within the
+given probabilities. 
+  
+2. Map
+This symulation is based in a fictional location on an island called "East Side Land". There will be 5 cities named after the inventors of the simulation: Mackers City 
+- Nogales Village - Gulans Town - Albono Hills - Zeidel Borough. The infections will randomly start in one of those cities and first rapidly spread amongst it, while 
+within the first days the spread to other cities will happean, but on limited grounds. 
+  
+3. Class for people
+In here we will create an instance for a human physically living in our island, they will be described by either one of the three states: healthy, infected or dead. 
+The state will change dynamically as the symulation progresses and other differernt classes interact with each other. Those classes will be added to cities unique
+for one of the five cities. Zombies will be appended to a zombie queue, unique for each city. All those people will be run as threads, they will be able to do the 
+following things:
+As healthy:
+- Change cities on limited basis.
+- MORE ACTIONS TO BE DEVELOPED AS FOLLOWS
+As zombie:
+- To infect others and make them zombies with (maybe with a time delay).
+- Mutate with limited probability to different more infectious classes. 
+- MORE ACTIONS TO BE DEVELOPED AS FOLLOWS
+  
+4. Class military
+In here we will create military personel appended to the city queues, whose purpose will be to kill zombies. There will be different military types with different
+ranks and zombie cleansing capabilities. They will be able to do following things:
+- Kill a number of zombies depending on type and rank, given some probabilistic model. 
+- Move cities where they are more necessary. 
+- NOTE: They also can get infected. Then they are zombies with special capabilities. 
+- MORE ACTIONS TO BE DEVELOPED AS FOLLOWS
+    
+5. Class medic
+In here we will create medics. Their purpose will be to develop a medicine to heal infected people. The medicine development will take time and will be based on 
+the probabilistic outgoing of the game. They will also be the ones to distribute the medicine. They can become infected! They will be able to do the following:
+- Develop and improve medicine
+- Heal zombies, turn them into people given some probability. 
+
+5. Class nuke (operation Oppenheimer)
+If a cities zombie/all creatures population passes 95% the military will drop a nuclear bomb, but only if accepted by the player. There will be only two nukes.
+If used a cities all threads are closing and everyone alive as either healthy, zombie, remaining military personel or medic will become dead. The city is no more. 
+The class will constantly check if any of the cities meets nukeing conditions. 
+
+All those classes will be run as a thread. All will be added to corresponding queues where they will interact with eachother:
+A) A healthy queue for a city. Will contain all healthy people, healthy military personnel, and healthy medics. 
+B) A zombie queue for a city. Will contain all zombies from poeple, military and medics classes. 
+C) A dead queue for a city. Containing all those who are dead, across all classes. 
+   
+FEEL FREE TO ADD ANY IDEAS, PLEASE INFORM OF CRUCIAL CHANGES OR RAISING PROBLEMS!!
+    
