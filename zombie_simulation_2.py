@@ -2,7 +2,6 @@
 import random
 import time
 import webbrowser
-import militaryclass as mc
 
 total_population = 0
 total_zombies = 0
@@ -32,6 +31,56 @@ class Nuke:
                     else:
                         print("Wrong input, try again!")
 
+
+class Military:
+
+    def __init__(self, id, type, rank):
+        self.id = id
+        self.type = type
+        self.rank = rank
+
+    def zombie_destruction(self, city_name):
+        if self.type == "Solider":
+            if self.rank == 1:
+                num_zombies = random.randrange(1, 5)
+                queue_positions = random.randrange(1, len(map[city_name].zombie_queue))
+                for i in range(num_zombies):
+                    moving = map[city_name].zombie_queue.pop(queue_positions)
+                    map[city_name].dead_queue.append(moving)
+            elif self.rank == 2:
+                num_zombies = random.randrange(1, 5)
+                queue_positions = random.randrange(1, len(map[city_name].zombie_queue))
+                for i in range(num_zombies):
+                    moving = map[city_name].zombie_queue.pop(queue_positions)
+                    map[city_name].dead_queue.append(moving)
+            elif self.rank == 3:
+                num_zombies = random.randrange(1, 5)
+                queue_positions = random.randrange(1, len(map[city_name].zombie_queue))
+                for i in range(num_zombies):
+                    moving = map[city_name].zombie_queue.pop(queue_positions)
+                    map[city_name].dead_queue.append(moving)
+        elif self.type == "Solider Armoured":
+            if self.rank == 1:
+                pass
+            elif self.rank == 2:
+                pass
+            elif self.rank == 3:
+                pass
+        elif self.type == "Tank":
+            if self.rank == 1:
+                pass
+            elif self.rank == 2:
+                pass
+            elif self.rank == 3:
+                pass
+        elif self.type == "Plane":
+            if self.rank == 1:
+                pass
+            elif self.rank == 2:
+                pass
+            elif self.rank == 3:
+                pass
+
 class statistics:
     def __init__(self, total_infected, time_elapsed, total_deaths, total_military_alive):
         self.total_infected = total_infected
@@ -54,8 +103,7 @@ class city:
         self.population = population
         self.healthy_queue = []
         self.zombie_queue = []
-        self.active_military_personnel = []
-        self.dead_military_personnel = []
+        self.dead_queue = []
 
 
 class citizen:
@@ -85,7 +133,9 @@ class citizen:
 MackersCity = city("Mackers City", 1000)
 GulansTown = city("Gulans Town", 500)
 NogalesVillage = city("Nogales Village", 500)
-map = [MackersCity, GulansTown, NogalesVillage]
+AlbonoHills = city("Albono Hills", 500)
+ZeidelBorough = city("Zeidel Borough", 500)
+map = [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]
 
 
 
@@ -175,6 +225,22 @@ def city_checker():
         print("Zombies:", zombie_count)
         print("Non-zombie Fatalities:", death_count)
         city_checker()
+    elif y == 'A':
+        print("\nALBONO HILLS: ")
+        healthy_count = len(AlbonoHills.healthy_queue)
+        zombie_count = len(AlbonoHills.zombie_queue)
+        death_count = len(AlbonoHills.death_queue)
+        print("Uninfected Citizens:", healthy_count)
+        print("Zombies:", zombie_count)
+        print("Non-zombie Fatalities:", death_count)
+    elif y == 'Z':
+        print("\nZEIDEL BOROUGH: ")
+        healthy_count = len(ZeidelBorough.healthy_queue)
+        zombie_count = len(ZeidelBorough.zombie_queue)
+        death_count = len(ZeidelBorough.death_queue)
+        print("Uninfected Citizens:", healthy_count)
+        print("Zombies:", zombie_count)
+        print("Non-zombie Fatalities:", death_count)
     elif y == '':
         pass
     else:
@@ -203,22 +269,28 @@ def simulation():
         for i in range(1501, 2001):
             c = citizen(i, NogalesVillage)
 
+        for i in range(2001, 2501):
+            c = citizen(i, AlbonoHills)
+
+        for i in range(2501, 3001):
+            c = citizen(i, ZeidelBorough)
+
         # Instantiating the military
-        for i in range(1, 51):
-            m = mc.Military(i, "Solider", random.randrange(1, 6))
-            city.active_military_personnel.append(m)
-        for i in range(1, 11):
-            m = mc.Military(i, "Tank", random.randrange(1, 4))
-            city.active_military_personnel.append(m)
-        for i in range(1, 6):
-            m = mc.Military(i, "Bomber", random.randrange(1, 3))
-            city.active_military_personnel.append(m)
-        for i in range(1, 21):
-            m = mc.Military(i, "Solider Armoured", random.randrange(1, 6))
-            city.active_military_personnel.append(m)
-        for i in range(1):
-            m = mc.Military(i, "Tactical Nuke", 1)
-            city.active_military_personnel.append(m)
+        # for i in range(1, 51):
+        #     m = mc.Military(i, "Solider", random.randrange(1, 6))
+        #     city.active_military_personnel.append(m)
+        # for i in range(1, 11):
+        #     m = mc.Military(i, "Tank", random.randrange(1, 4))
+        #     city.active_military_personnel.append(m)
+        # for i in range(1, 6):
+        #     m = mc.Military(i, "Bomber", random.randrange(1, 3))
+        #     city.active_military_personnel.append(m)
+        # for i in range(1, 21):
+        #     m = mc.Military(i, "Solider Armoured", random.randrange(1, 6))
+        #     city.active_military_personnel.append(m)
+        # for i in range(1):
+        #     m = mc.Military(i, "Tactical Nuke", 1)
+        #     city.active_military_personnel.append(m)
 
 
         ### STARTING SIMULATION
@@ -235,6 +307,8 @@ def simulation():
         print("\t1.", MackersCity.name, "with population: ", MackersCity.population)
         print("\t2.", NogalesVillage.name, "with population: ", NogalesVillage.population)
         print("\t3.", GulansTown.name, "with population: ", GulansTown.population)
+        print("\t4.", AlbonoHills.name, "with population:", AlbonoHills.population)
+        print("\t5.", ZeidelBorough.name, "with population:", ZeidelBorough.population)
         input("\nWhen you are ready to play, enter any key. ")
 
 
