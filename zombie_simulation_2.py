@@ -1,5 +1,4 @@
 # zombie_simulation.py
-import random
 import time
 import webbrowser
 
