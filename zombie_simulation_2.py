@@ -132,7 +132,7 @@ class plague_inc:
     def __init__(self, city_instance):
         self.name = city_instance.name
         self.zombie_queue = city_instance.zombie_queue
-        self.prompts_healthy = [f"Business as Usual in {self.name}", "Scientists discover a bacteria that eats plastic", "Juice WRLD hologram performs at sold-out concert", "AI development accelerating at an alarming rate", "Summer 2023 hottest on record"]
+        self.prompts_healthy = [f"Business as Usual in {self.name}", "Scientists discover a bacteria that eats plastic", f"Juice WRLD hologram performs at sold-out concert in {self.name}", "AI development accelerating at an alarming rate", "Summer 2023 hottest on record"]
         self.prompts_low_concern = ["Odd disease spotted", "Epidemiologists concerned", "FOX news claims hoax, blames progressives", "Local governments consider lockdown", "Parents pull children out of schools"]
         self.prompts_high_concern = ["Schools close down", "Widespread chaos", "Shops looted", "Widespread power outages", "FOX news advocates for reopening of schools"]
         self.prompts_defeat = ["Few humans remain", "Government has ceased to function", "Zombies begin to starve", "FOX news blames Obama", f"Nuclear Reactor in {self.name} breaks down"]
