@@ -1,6 +1,8 @@
 # zombie_simulation.py
+import threading
 import time
 import webbrowser
+import random
 
 total_population = 0
 total_zombies = 0
@@ -33,32 +35,34 @@ class Nuke:
 
 class Military:
 
-    def __init__(self, id, type, rank):
+    def __init__(self, id, type, rank, city_name):
         self.id = id
         self.type = type
         self.rank = rank
+        self.city_name = city_name
+        self.infected = False
 
-    def zombie_destruction(self, city_name):
-        if self.type == "Solider":
+    def zombie_destruction(self):
+        if self.type == "Soldier":
             if self.rank == 1:
                 num_zombies = random.randrange(1, 5)
-                queue_positions = random.randrange(1, len(map[city_name].zombie_queue))
+                queue_positions = random.randrange(1, len(self.city_name.zombie_queue))
                 for i in range(num_zombies):
-                    moving = map[city_name].zombie_queue.pop(queue_positions)
-                    map[city_name].dead_queue.append(moving)
+                    moving = self.city_name.zombie_queue.pop(queue_positions)
+                    self.city_name.dead_queue.append(moving)
             elif self.rank == 2:
-                num_zombies = random.randrange(1, 5)
-                queue_positions = random.randrange(1, len(map[city_name].zombie_queue))
+                num_zombies = random.randrange(1, 10)
+                queue_positions = random.randrange(1, len(self.city_name.zombie_queue))
                 for i in range(num_zombies):
-                    moving = map[city_name].zombie_queue.pop(queue_positions)
-                    map[city_name].dead_queue.append(moving)
+                    moving = self.city_name.zombie_queue.pop(queue_positions)
+                    self.city_name.dead_queue.append(moving)
             elif self.rank == 3:
-                num_zombies = random.randrange(1, 5)
-                queue_positions = random.randrange(1, len(map[city_name].zombie_queue))
+                num_zombies = random.randrange(1, 15)
+                queue_positions = random.randrange(1, len(self.city_name.zombie_queue))
                 for i in range(num_zombies):
-                    moving = map[city_name].zombie_queue.pop(queue_positions)
-                    map[city_name].dead_queue.append(moving)
-        elif self.type == "Solider Armoured":
+                    moving = self.city_name.zombie_queue.pop(queue_positions)
+                    self.city_name.dead_queue.append(moving)
+        elif self.type == "Soldier Armoured":
             if self.rank == 1:
                 pass
             elif self.rank == 2:
@@ -81,11 +85,10 @@ class Military:
                 pass
 
 class statistics:
-    def __init__(self, total_infected, time_elapsed, total_deaths, total_military_alive):
+    def __init__(self, total_infected, time_elapsed, total_deaths):
         self.total_infected = total_infected
         self.time_elapsed = time_elapsed
         self.total_deaths = total_deaths
-        self.total_military_alive = total_military_alive
 
     def report(self):
         print()
@@ -93,7 +96,6 @@ class statistics:
         print("\tTime Elapsed: ", self.time_elapsed)
         print("\tTotal Infected: ", self.total_infected)
         print("\tTotal Deaths: ", self.total_deaths)
-        print('\tTotal military alive: ', self.total_military_alive)
 
 
 class city:
@@ -103,7 +105,9 @@ class city:
         self.healthy_queue = []
         self.zombie_queue = []
         self.dead_queue = []
-        self.active_military_personnel = []
+        self.healthy_queue_lock = threading.Lock()
+        self.zombie_queue_lock = threading.Lock()
+        self.dead_queue_lock = threading.Lock()
 
 
 class citizen:
@@ -125,9 +129,8 @@ class citizen:
 
     def death(self):
         if self.alive:
+            self.city.dead_queue.append(self)
             self.alive = False
-
-import random
 class plague_inc:
     def __init__(self, city_instance):
         self.name = city_instance.name
@@ -138,15 +141,14 @@ class plague_inc:
         self.prompts_defeat = ["Few humans remain", "Government has ceased to function", "Zombies begin to starve", "FOX news blames Obama", f"Nuclear Reactor in {self.name} breaks down"]
 
     def prompts(self):
-        i = random.randrange(0,4)
         if len(self.zombie_queue) < 5:
-            print(self.prompts_healthy[i])
+            print(random.choice(self.prompts_healthy))
         elif len(self.zombie_queue) < 50:
-            print(self.prompts_low_concern[i])
+            print(random.choice(self.prompts_low_concern))
         elif len(self.zombie_queue) < 100:
-            print(self.prompts_high_concern[i])
+            print(random.choice(self.prompts_high_concern))
         else:
-            print(self.prompts_defeat[i])
+            print(random.choice(self.prompts_defeat))
 
 
 # class zombie_swarm:
@@ -174,43 +176,23 @@ class plague_inc:
 
 
 # Creating the map / cities
-MackersCity = city("Mackers City", 1000)
-GulansTown = city("Gulans Town", 500)
-NogalesVillage = city("Nogales Village", 500)
-AlbonoHills = city("Albono Hills", 500)
-ZeidelBorough = city("Zeidel Borough", 500)
+MackersCity = city("Mackers City", random.randrange(500, 1001))
+GulansTown = city("Gulans Town", random.randrange(20, 201))
+NogalesVillage = city("Nogales Village", random.randrange(50, 451))
+AlbonoHills = city("Albono Hills", random.randrange(250, 701))
+ZeidelBorough = city("Zeidel Borough", random.randrange(400, 951))
 map = [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]
-
-
 
 # The simulation per day
 def day_sim(day_number):
     print("\n--Today is day number", day_number, "--")
-    city_list = [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]
-    z = random.randint(0, len(city_list) - 1)
-    city_instance = city_list[z]# or any other city instance you want to use
+    global map
+    z = random.randint(0, len(map) - 1)
+    city_instance = map[z]# or any other city instance you want to use
     plague_instance = plague_inc(city_instance)
     plague_instance.prompts()
 
-    city = random.randint(0, 2)
-    city = map[city]
 
-    if city.name == 'Mackers City':
-        lower = 0
-        upper = 999
-    else:
-        lower = 0
-        upper = 499
-
-
-    infected = random.randint(lower, upper)
-    c = city.healthy_queue[infected]
-    c.zombify()
-
-
-
-#
-    
 #def non_zombie_fatalities
 
 def non_zombie_fatalities():
@@ -301,102 +283,85 @@ def city_checker():
         city_checker()
 
 
-
-def simulation():
-    try:
-        ### SETUP
-        global total_population
-        global total_zombies
-
-        # For each city, add their population to the total population
-        for city in map:
-            total_population += city.population
-
-        # Instantiating the citizens
-        for i in range(1, 1001):
-            c = citizen(i, MackersCity)
-
-        for i in range(1001, 1501):
-            c = citizen(i, GulansTown)
-
-        for i in range(1501, 2001):
-            c = citizen(i, NogalesVillage)
-
-        for i in range(2001, 2501):
-            c = citizen(i, AlbonoHills)
-
-        for i in range(2501, 3001):
-            c = citizen(i, ZeidelBorough)
-
-        # Instantiating the military
-        # for i in range(1, 51):
-        #     m = mc.Military(i, "Solider", random.randrange(1, 6))
-        #     city.active_military_personnel.append(m)
-        # for i in range(1, 11):
-        #     m = mc.Military(i, "Tank", random.randrange(1, 4))
-        #     city.active_military_personnel.append(m)
-        # for i in range(1, 6):
-        #     m = mc.Military(i, "Bomber", random.randrange(1, 3))
-        #     city.active_military_personnel.append(m)
-        # for i in range(1, 21):
-        #     m = mc.Military(i, "Solider Armoured", random.randrange(1, 6))
-        #     city.active_military_personnel.append(m)
-        # for i in range(1):
-        #     m = mc.Military(i, "Tactical Nuke", 1)
-        #     city.active_military_personnel.append(m)
-
-
-        ### STARTING SIMULATION
-        print("Welcome to our zombie simulation. ")
-        print("GUIDE: ")
-        print("\t1. Read the events of the zombie apocalypse. ")
-        print("\t2. Make choices to stop the spread of zombies. ")
-        print("\t3. Everyday you will be notified of the current situation. ")
-        print("\t   Enter any key to continue the simulation when prompted. ")
-        print("\t4. At any moment, press <ENTER> to leave simulation. ")
-
-        print("\nBACKGROUND: ")
-        print("\t* Your map is composed of 3 cities. ")
-        print("\t1.", MackersCity.name, "with population: ", MackersCity.population)
-        print("\t2.", NogalesVillage.name, "with population: ", NogalesVillage.population)
-        print("\t3.", GulansTown.name, "with population: ", GulansTown.population)
-        print("\t4.", AlbonoHills.name, "with population:", AlbonoHills.population)
-        print("\t5.", ZeidelBorough.name, "with population:", ZeidelBorough.population)
-        input("\nWhen you are ready to play, enter any key. ")
-
-
-
-
-        ### WHILE PLAYING / SIMULATION BODY
-        enter = 0
-        global days
-
-        while enter != '':
-            days += 1
-            day_sim(days)
-            enter = input("<ENTER> to quit simulation. ")
-
-
-        ### REPORT
-        for city in map:
-            total_zombies += len(city.zombie_queue)
-
-        total_military = 0
-        for city in map:
-            total_military += len(city.active_military_personnel)
-
-        scoreboard = statistics(total_zombies, days, deaths, total_military)
-        scoreboard.report()
-
-        city_checker()
+# def simulation():
+#     try:
+#         ### SETUP
+#         global total_population
+#         global total_zombies
+#
+#         # For each city, add their population to the total population
+#         for city in map:
+#             total_population += city.population
+#
+#         # Instantiating the citizens (TO BE THREADED)
+#         for i in range(1, 1001):
+#             c = citizen(i, MackersCity)
+#
+#         for i in range(1001, 1501):
+#             c = citizen(i, GulansTown)
+#
+#         for i in range(1501, 2001):
+#             c = citizen(i, NogalesVillage)
+#
+#         for i in range(2001, 2501):
+#             c = citizen(i, AlbonoHills)
+#
+#         for i in range(2501, 3001):
+#             c = citizen(i, ZeidelBorough)
+#
+#         # Instantiating the military (TO BE THREADED)
+#         # for i in range(1, 51):
+#         #     m = mc.Military(i, "Solider", random.randrange(1, 6))
+#         #     city.active_military_personnel.append(m)
+#         # for i in range(1, 11):
+#         #     m = mc.Military(i, "Tank", random.randrange(1, 4))
+#         #     city.active_military_personnel.append(m)
+#         # for i in range(1, 6):
+#         #     m = mc.Military(i, "Bomber", random.randrange(1, 3))
+#         #     city.active_military_personnel.append(m)
+#         # for i in range(1, 21):
+#         #     m = mc.Military(i, "Solider Armoured", random.randrange(1, 6))
+#         #     city.active_military_personnel.append(m)
+#         # for i in range(1):
+#         #     m = mc.Military(i, "Tactical Nuke", 1)
+#         #     city.active_military_personnel.append(m)
+#
+#
+#         ### STARTING SIMULATION
+#         print("Welcome to our zombie simulation. ")
+#         print("GUIDE: ")
+#         print("\t1. Read the events of the zombie apocalypse. ")
+#         print("\t2. Make choices to stop the spread of zombies. ")
+#         print("\t3. Everyday you will be notified of the current situation. ")
+#         print("\t   Enter any key to continue the simulation when prompted. ")
+#         print("\t4. At any moment, press <ENTER> to leave simulation. ")
+#
+#         print("\nBACKGROUND: ")
+#         print("\t* Your map is composed of 3 cities. ")
+#         print("\t1.", MackersCity.name, "with population: ", MackersCity.population)
+#         print("\t2.", NogalesVillage.name, "with population: ", NogalesVillage.population)
+#         print("\t3.", GulansTown.name, "with population: ", GulansTown.population)
+#         print("\t4.", AlbonoHills.name, "with population:", AlbonoHills.population)
+#         print("\t5.", ZeidelBorough.name, "with population:", ZeidelBorough.population)
+#         input("\nWhen you are ready to play, enter any key. ")
+#
+#
+#         ### REPORT
+#         for city in map:
+#             total_zombies += len(city.zombie_queue)
+#
+#         scoreboard = statistics(total_zombies, days, deaths)
+#         scoreboard.report()
+#
+#         city_checker()
+#
+#
+#     except:
+#         if KeyboardInterrupt:
+#             raise
+#         else:
+#             print("\n\nThere was an error. ")
 
 
-    except:
-        if KeyboardInterrupt:
-            raise
-        else:
-            print("\n\nThere was an error. ")
-
-
-simulation()
+# simulation()
 
