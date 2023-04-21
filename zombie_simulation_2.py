@@ -104,6 +104,7 @@ class city:
         self.healthy_queue = []
         self.zombie_queue = []
         self.dead_queue = []
+        self.active_military_personnel = []
 
 
 class citizen:
@@ -169,6 +170,7 @@ def death(city_population):
     death_citizens = 0
 
     while death_citizens < 1:
+
         probability = random.random()
 
         if probability < 0.01:
@@ -202,7 +204,7 @@ def city_checker():
         print("\nMACKERS CITY: ")
         healthy_count = len(MackersCity.healthy_queue)
         zombie_count = len(MackersCity.zombie_queue)
-        death_count = len(MackersCity.death_queue)
+        death_count = len(MackersCity.dead_queue)
         print("Uninfected Citizens:", healthy_count)
         print("Zombies:", zombie_count)
         print("Non-zombie Fatalities:", death_count)
@@ -211,7 +213,7 @@ def city_checker():
         print("\nNOGALES VILLAGE: ")
         healthy_count = len(NogalesVillage.healthy_queue)
         zombie_count = len(NogalesVillage.zombie_queue)
-        death_count = len(NogalesVillage.death_queue)
+        death_count = len(NogalesVillage.dead_queue)
         print("Uninfected Citizens:", healthy_count)
         print("Zombies:", zombie_count)
         print("Non-zombie Fatalities:", death_count)
@@ -220,7 +222,7 @@ def city_checker():
         print("\nGULANS TOWN: ")
         healthy_count = len(GulansTown.healthy_queue)
         zombie_count = len(GulansTown.zombie_queue)
-        death_count = len(GulansTown.death_queue)
+        death_count = len(GulansTown.dead_queue)
         print("Uninfected Citizens:", healthy_count)
         print("Zombies:", zombie_count)
         print("Non-zombie Fatalities:", death_count)
@@ -229,7 +231,7 @@ def city_checker():
         print("\nALBONO HILLS: ")
         healthy_count = len(AlbonoHills.healthy_queue)
         zombie_count = len(AlbonoHills.zombie_queue)
-        death_count = len(AlbonoHills.death_queue)
+        death_count = len(AlbonoHills.dead_queue)
         print("Uninfected Citizens:", healthy_count)
         print("Zombies:", zombie_count)
         print("Non-zombie Fatalities:", death_count)
@@ -237,7 +239,7 @@ def city_checker():
         print("\nZEIDEL BOROUGH: ")
         healthy_count = len(ZeidelBorough.healthy_queue)
         zombie_count = len(ZeidelBorough.zombie_queue)
-        death_count = len(ZeidelBorough.death_queue)
+        death_count = len(ZeidelBorough.dead_queue)
         print("Uninfected Citizens:", healthy_count)
         print("Zombies:", zombie_count)
         print("Non-zombie Fatalities:", death_count)
