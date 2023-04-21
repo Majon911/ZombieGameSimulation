@@ -128,6 +128,50 @@ class citizen:
         if self.alive:
             self.alive = False
 
+import random
+class plague_inc:
+    def __init__(self, city_instance):
+        self.name = city_instance.name
+        self.zombie_queue = city_instance.zombie_queue
+        self.prompts_healthy = [f"Business as Usual in {self.name}", "Scientists discover a bacteria that eats plastic", f"Juice WRLD hologram performs at sold-out concert in {self.name}", "AI development accelerating at an alarming rate", "Summer 2023 hottest on record"]
+        self.prompts_low_concern = ["Odd disease spotted", "Epidemiologists concerned", "FOX news claims hoax, blames progressives", "Local governments consider lockdown", "Parents pull children out of schools"]
+        self.prompts_high_concern = ["Schools close down", "Widespread chaos", "Shops looted", "Widespread power outages", "FOX news advocates for reopening of schools"]
+        self.prompts_defeat = ["Few humans remain", "Government has ceased to function", "Zombies begin to starve", "FOX news blames Obama", f"Nuclear Reactor in {self.name} breaks down"]
+
+    def prompts(self):
+        i = random.randrange(0,4)
+        if len(self.zombie_queue) < 5:
+            print(self.prompts_healthy[i])
+        elif len(self.zombie_queue) < 50:
+            print(self.prompts_low_concern[i])
+        elif len(self.zombie_queue) < 100:
+            print(self.prompts_high_concern[i])
+        else:
+            print(self.prompts_defeat[i])
+
+
+# class zombie_swarm:
+#     def __init__(self, city_instance):
+#         #ned to incorporate self.id somehow and instead of removing the id, remove the number of zombies in zombie_deaths
+#         self.name = city_instance.name
+#         self.zombie_queue = city_instance.zombie_queue
+#
+#     def swarm(self):
+#         i = [1, 5, 75, 100, 175, 250, 325, 400, 475, 600, 1000]
+#         #reasons_of_death = ["starvation", "by crowd crush", "by machine gun"]
+#         zombie_deaths = random.randrange(10, 400)
+#         #reasons_chance = random.randrange(0, len(reasons_of_death) + 1)
+#         if len(self.zombie_queue) == i:
+#             print(f"A zombie swarm is attacking {self.name}!")
+#             self.zombie_queue.remove(zombie_deaths)
+#             for i in range(zombie_deaths):
+#                 moving = map[self.name].zombie_queue.pop(i)
+#                 map[self.name].dead_queue.append(moving)
+#             #for reasons_chance in reasons_of_death:
+#             print(f"{zombie_deaths} zombies have died")
+
+
+
 
 
 # Creating the map / cities
@@ -143,6 +187,12 @@ map = [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]
 # The simulation per day
 def day_sim(day_number):
     print("\n--Today is day number", day_number, "--")
+    city_list = [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]
+    z = random.randint(0, len(city_list) - 1)
+    city_instance = city_list[z]# or any other city instance you want to use
+    plague_instance = plague_inc(city_instance)
+    plague_instance.prompts()
+
     city = random.randint(0, 2)
     city = map[city]
 
@@ -156,9 +206,11 @@ def day_sim(day_number):
 
     infected = random.randint(lower, upper)
     c = city.healthy_queue[infected]
-    c.zombify()  
-    
-    
+    c.zombify()
+
+
+
+#
     
 #def non_zombie_fatalities
 
