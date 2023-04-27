@@ -171,6 +171,32 @@ class plague_inc:
 #             #for reasons_chance in reasons_of_death:
 #             print(f"{zombie_deaths} zombies have died")
 
+class natural_disaster:
+    def __init__(self, city_instance):
+        self.name = city_instance.name
+        self.zombie_queue = city_instance.zombie_queue
+        self.healthy_queue = city_instance.healthy_queue
+        self.dead_queue = city_instance.dead_queue
+        self.disaster = ['fire', 'flood', 'tornado', 'earthquake']
+        self.casualties = 0
+
+
+    def disaster_function(self):
+        choice_of_disaster = random.choice(self.disaster)
+        print("A", choice_of_disaster,  f"has started in {self.name}!")
+        if len(self.healthy_queue) > 5:
+            for x in range(0,5):
+                i = self.healthy_queue.pop(0)
+                self.dead_queue.append(i)
+                self.casualties += x
+        if len(self.zombie_queue) > 5:
+            for x in range(0,5):
+                i = self.zombie_queue.pop(0)
+                self.dead_queue.append(i)
+                self.casualties += x
+        print(self.casualties, "casualties", "in ", f"{self.name}")
+        self.casualties = 0
+
 
 
 
@@ -191,6 +217,10 @@ def day_sim(day_number):
     city_instance = map[z]# or any other city instance you want to use
     plague_instance = plague_inc(city_instance)
     plague_instance.prompts()
+    disaster_instance = natural_disaster(city_instance)
+    chances = random.randint(0,3)
+    if chances == 2:
+        disaster_instance.disaster_function()
 
 
 #def non_zombie_fatalities
