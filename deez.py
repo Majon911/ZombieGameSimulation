@@ -162,15 +162,15 @@ class natural_disaster:
         choice_of_disaster = random.choice(self.disaster)
         print("A", choice_of_disaster,  f"has started in {self.name}!")
         if len(self.healthy_queue) > 5:
-            for x in range(0,5):
+            for x in range(0,len(self.healthy_queue) - 1):
                 i = self.healthy_queue.pop(0)
                 self.dead_queue.append(i)
-                self.casualties += x
+                self.casualties = x
         if len(self.zombie_queue) > 5:
-            for x in range(0,5):
+            for x in range(0,len(self.healthy_queue) - 1):
                 i = self.zombie_queue.pop(0)
                 self.dead_queue.append(i)
-                self.casualties += x
+                self.casualties = x
         print(self.casualties, "casualties", "in ", f"{self.name}")
         self.casualties = 0
 
