@@ -183,7 +183,7 @@ class natural_disaster:
 
     def disaster_function(self):
         choice_of_disaster = random.choice(self.disaster)
-        print("A", choice_of_disaster,  f"has started in {self.name}!")
+        print("A", choice_of_disaster,  f"has occured in {self.name}!")
         if len(self.healthy_queue) > 5:
             for x in range(0,len(self.healthy_queue) - 1):
                 i = self.healthy_queue.pop(0)
