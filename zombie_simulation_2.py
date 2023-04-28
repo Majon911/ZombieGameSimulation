@@ -35,7 +35,6 @@ class Nuke:
 
 
 class Military:
-
     def __init__(self, id, type, rank, city_name):
         self.id = id
         self.type = type
