@@ -147,7 +147,7 @@ class plague_inc:
             print(self.prompts_high_concern[i])
         else:
             print(self.prompts_defeat[i])
-
+import math
 class natural_disaster:
     def __init__(self, city_instance):
         self.name = city_instance.name
@@ -157,17 +157,16 @@ class natural_disaster:
         self.disaster = ['fire', 'flood', 'tornado', 'earthquake']
         self.casualties = 0
 
-
     def disaster_function(self):
         choice_of_disaster = random.choice(self.disaster)
         print("A", choice_of_disaster,  f"has started in {self.name}!")
         if len(self.healthy_queue) > 5:
-            for x in range(0,len(self.healthy_queue) - 1):
+            for x in range(0,math.floor((len(self.healthy_queue) / 2))):
                 i = self.healthy_queue.pop(0)
                 self.dead_queue.append(i)
                 self.casualties = x
         if len(self.zombie_queue) > 5:
-            for x in range(0,len(self.healthy_queue) - 1):
+            for x in range(0,math.floor(len(self.zombie_queue) / 2)):
                 i = self.zombie_queue.pop(0)
                 self.dead_queue.append(i)
                 self.casualties = x
