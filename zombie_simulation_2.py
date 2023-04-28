@@ -156,25 +156,23 @@ class plague_inc:
             print(random.choice(self.prompts_defeat))
 
 
-# class zombie_swarm:
-#     def __init__(self, city_instance):
-#         #ned to incorporate self.id somehow and instead of removing the id, remove the number of zombies in zombie_deaths
-#         self.name = city_instance.name
-#         self.zombie_queue = city_instance.zombie_queue
-#
-#     def swarm(self):
-#         i = [1, 5, 75, 100, 175, 250, 325, 400, 475, 600, 1000]
-#         #reasons_of_death = ["starvation", "by crowd crush", "by machine gun"]
-#         zombie_deaths = random.randrange(10, 400)
-#         #reasons_chance = random.randrange(0, len(reasons_of_death) + 1)
-#         if len(self.zombie_queue) == i:
-#             print(f"A zombie swarm is attacking {self.name}!")
-#             self.zombie_queue.remove(zombie_deaths)
-#             for i in range(zombie_deaths):
-#                 moving = map[self.name].zombie_queue.pop(i)
-#                 map[self.name].dead_queue.append(moving)
-#             #for reasons_chance in reasons_of_death:
-#             print(f"{zombie_deaths} zombies have died")
+class zombie_swarm:
+    def __init__(self, city_instance):
+        self.name = city_instance.name
+        self.zombie_queue = city_instance.zombie_queue
+        self.healthy_queue = city_instance.healthy_queue
+        self.dead_queue = city_instance.dead_queue
+        self.chances = random.randint(0, 1)
+        self.people_dead = random.randint(1, 30)
+    def swarm(self):
+        if len(self.zombie_queue) > 1:
+            if self.chances == 0:
+                print("There is a zombie swarm in ", {self.name}, "!")
+                for x in range(0, self.people_dead):
+                    i = self.healthy_queue.pop(0)
+                    self.zombie_queue.append(i)
+                print(self.people_dead, "people have become zombies!")
+
 
 class natural_disaster:
     def __init__(self, city_instance):
