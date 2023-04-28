@@ -105,6 +105,10 @@ class city:
         self.zombie_queue = []
         self.dead_queue = []
 
+    def fallen(self):
+        if len(self.healthy_queue) == 0:
+            print(f"{self.name} has fallen")
+
 
 class citizen:
     def __init__(self, id, city):
@@ -211,6 +215,7 @@ def day_sim(day_number):
     infected = random.randint(lower, upper)
     c = city.healthy_queue[infected]
     c.zombify()
+    city.fallen()
 
 
 

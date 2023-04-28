@@ -110,6 +110,10 @@ class city:
         self.zombie_queue_lock = threading.Lock()
         self.dead_queue_lock = threading.Lock()
 
+    def fallen(self):
+        if len(self.healthy_queue) == 0:
+            print(f"{self.name} has fallen")
+
 
 class citizen:
     def __init__(self, id, city):
