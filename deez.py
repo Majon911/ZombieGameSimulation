@@ -177,6 +177,24 @@ class natural_disaster:
         print(self.casualties, "casualties", "in ", f"{self.name}")
         self.casualties = 0
 
+class zombie_swarm:
+    def __init__(self, city_instance):
+        self.name = city_instance.name
+        self.zombie_queue = city_instance.zombie_queue
+        self.healthy_queue = city_instance.healthy_queue
+        self.dead_queue = city_instance.dead_queue
+        self.chances = random.randint(0, 1)
+        self.people_dead = random.randint(1, 30)
+    def swarm(self):
+        if len(self.zombie_queue) > 1:
+            if self.chances == 0:
+                print("There is a zombie swarm in ", {self.name}, "!")
+                for x in range(0, self.people_dead):
+                    i = self.healthy_queue.pop(0)
+                    self.zombie_queue.append(i)
+                print(self.people_dead, "people have become zombies!")
+
+
 
 # Creating the map / cities
 MackersCity = city("Mackers City", 1000)
@@ -200,6 +218,8 @@ def day_sim(day_number):
     chances = random.randint(0,3)
     if chances == 2:
         disaster_instance.disaster_function()
+    swarm_instance = zombie_swarm(city_instance)
+    swarm_instance.swarm()
 
     city = random.randint(0, 2)
     city = map[city]

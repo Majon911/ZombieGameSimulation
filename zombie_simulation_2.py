@@ -264,10 +264,10 @@ class zombie_swarm:
         self.zombie_queue = city_instance.zombie_queue
         self.healthy_queue = city_instance.healthy_queue
         self.dead_queue = city_instance.dead_queue
-        self.chances = random.randint(0, 1)
+        self.chances = random.randint(0, 10)
         self.people_dead = random.randint(1, 30)
     def swarm(self):
-        if len(self.zombie_queue) > 1:
+        if len(self.zombie_queue) > 50:
             if self.chances == 0:
                 print("There is a zombie swarm in ", {self.name}, "!")
                 for x in range(0, self.people_dead):
