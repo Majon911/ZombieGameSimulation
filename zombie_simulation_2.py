@@ -3,6 +3,7 @@ import threading
 import time
 import webbrowser
 import random
+import math
 
 total_population = 0
 total_zombies = 0
@@ -287,12 +288,12 @@ class natural_disaster:
         choice_of_disaster = random.choice(self.disaster)
         print("A", choice_of_disaster,  f"has occured in {self.name}!")
         if len(self.healthy_queue) > 5:
-            for x in range(0,len(self.healthy_queue) - 1):
+            for x in range(0,math.floor(len(self.healthy_queue) / 2)):
                 i = self.healthy_queue.pop(0)
                 self.dead_queue.append(i)
                 self.casualties = x
         if len(self.zombie_queue) > 5:
-            for x in range(0,len(self.healthy_queue) - 1):
+            for x in range(0,math.floor(len(self.zombie_queue) / 2)):
                 i = self.zombie_queue.pop(0)
                 self.dead_queue.append(i)
                 self.casualties = x
