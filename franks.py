@@ -10,20 +10,6 @@ days = 0
 deaths = 0
 
 
-class statistics:
-    def __init__(self, total_infected, time_elapsed, total_deaths):
-        self.total_infected = total_infected
-        self.time_elapsed = time_elapsed
-        self.total_deaths = total_deaths
-
-    def report(self):
-        print()
-        print("\nSCOREBOARD: ")
-        print("\tTime Elapsed: ", self.time_elapsed)
-        print("\tTotal Infected: ", self.total_infected)
-        print("\tTotal Deaths: ", self.total_deaths)
-
-
 class city:
     def __init__(self, name, population):
         self.name = name
