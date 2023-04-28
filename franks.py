@@ -9,7 +9,7 @@ total_infected = 0
 days = 0
 deaths = 0
 
-
+# city class
 class city:
     def __init__(self, name, population):
         self.name = name
@@ -22,6 +22,7 @@ class city:
         self.dead_queue_lock = threading.Lock()
 
 
+# citizen class
 class citizen:
     def __init__(self, id, city):
         self.id = id
