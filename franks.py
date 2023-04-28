@@ -9,6 +9,7 @@ total_infected = 0
 days = 0
 deaths = 0
 
+
 # city class
 class city:
     def __init__(self, name, population):
