@@ -14,6 +14,7 @@ class Military:
         self.city_name = city_name
         self.infected = False
         self.alive = True
+        self.job = "Military"
         self.city_name.healthy_queue_lock.acquire()
         self.city_name.healthy_queue.append(self)
         self.city_name.healthy_queue_lock.release()
@@ -233,6 +234,7 @@ class Medic:
         self.city_name = city_name
         self.infected = False
         self.alive = True
+        self.job = "Medic"
         self.city_name.healthy_queue_lock.acquire()
         self.city_name.healthy_queue.append(self)
         self.city_name.healthy_queue_lock.release()
@@ -326,6 +328,7 @@ class Citizen:
         self.alive = True
         self.infected = False
         self.city_name = city_name
+        self.job = "Civil"
         self.city_name.healthy_queue_lock.acquire()
         self.city_name.healthy_queue.append(self)
         self.city_name.healthy_queue_lock.release()
@@ -353,7 +356,7 @@ class Citizen:
                     citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
                     self.city_name.healthy_queue_lock.release()
                     citizen.infected = True
-                    print("Citizen", self.id, "INFECTED citizen", citizen.id)
+                    print("Citizen", self.id, "INFECTED", citizen.job, citizen.id)
                     self.city_name.zombie_queue_lock.acquire()
                     self.city_name.zombie_queue.append(citizen)
                     self.city_name.zombie_queue_lock.release()
