@@ -203,6 +203,71 @@ class Military:
                 time.sleep(2)
 
 
+# Medics class
+class Medic:
+    def __init__(self, id, type, city_name):
+        self.id = id
+        self.type = type
+        self.city_name = city_name
+        self.infected = False
+        self.alive = True
+
+    def zombie_cure(self):
+        while True:
+            if self.alive == False:
+                print(f"Thread Medic {self.id}, is dead, thread stopping.")
+                break
+            if self.type == "Medic":
+                if self.city_name.zombie_queue / self.city_name.population >= 0.75:
+                    num_infected = random.randrange(7, 25)
+                    queue_positions = random.randrange(len(self.city_name.zombie_queue))
+                    for i in range(num_infected):
+                        self.city_name.zombie_queue_lock.acquire()
+                        moving = self.city_name.zombie_queue.pop(queue_positions)
+                        self.city_name.zombie_queue_lock.release()
+                        moving.alive = True
+                        self.city_name.healthy_queue_lock.acquire()
+                        self.city_name.healthy_queue.append(moving)
+                        self.city_name.healthy_queue_lock.release()
+                elif self.city_name.zombie_queue / self.city_name.population < 0.75 and self.city_name.zombie_queue / self.city_name.population >= 0.5:
+                    num_infected = random.randrange(5, 20)
+                    queue_positions = random.randrange(len(self.city_name.zombie_queue))
+                    for i in range(num_infected):
+                        self.city_name.zombie_queue_lock.acquire()
+                        moving = self.city_name.zombie_queue.pop(queue_positions)
+                        self.city_name.zombie_queue_lock.release()
+                        moving.alive = True
+                        self.city_name.healthy_queue_lock.acquire()
+                        self.city_name.healthy_queue.append(moving)
+                        self.city_name.healthy_queue_lock.release()
+                elif self.city_name.zombie_queue / self.city_name.population < 0.5 and self.city_name.zombie_queue / self.city_name.population >= 0.25:
+                    num_infected = random.randrange(3, 15)
+                    queue_positions = random.randrange(len(self.city_name.zombie_queue))
+                    for i in range(num_infected):
+                        self.city_name.zombie_queue_lock.acquire()
+                        moving = self.city_name.zombie_queue.pop(queue_positions)
+                        self.city_name.zombie_queue_lock.release()
+                        moving.alive = True
+                        self.city_name.healthy_queue_lock.acquire()
+                        self.city_name.healthy_queue.append(moving)
+                        self.city_name.healthy_queue_lock.release()
+
+    def medic_zombify(self):
+        while True:
+            if self.alive == False:
+                break
+            if self.infected:
+                print("Medic", self.id, "has been infected! ")
+                # print(self.city_name.name, "is in danger.")
+                self.city_name.healthy_queue.acquire()
+                citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
+                self.city_name.healthy_queue.release()
+                citizen.infected = True
+                self.city_name.zombie_queue_lock.acquire()
+                self.city_name.zombie_queue.append(citizen)
+                self.city_name.zombie_queue_lock.release()
+                time.sleep(2)
+
 class statistics:
     def __init__(self, total_infected, time_elapsed, total_deaths):
         self.total_infected = total_infected
