@@ -243,9 +243,11 @@ class Medic:
                 print(f"Thread Medic {self.id}, is dead, thread stopping.")
                 break
             if self.type == "Medic":
-                if self.city_name.zombie_queue / self.city_name.population >= 0.75:
+                if self.city_name.zombie_queue / (self.city_name.zombie_queue + self.city_name.healthy_queue) >= 0.75:
                     num_infected = random.randrange(7, 25)
+                    self.city_name.zombie_queue_lock.acquire()
                     queue_positions = random.randrange(len(self.city_name.zombie_queue))
+                    self.city_name.zombie_queue_lock.release()
                     for i in range(num_infected):
                         self.city_name.zombie_queue_lock.acquire()
                         moving = self.city_name.zombie_queue.pop(queue_positions)
@@ -254,9 +256,11 @@ class Medic:
                         self.city_name.healthy_queue_lock.acquire()
                         self.city_name.healthy_queue.append(moving)
                         self.city_name.healthy_queue_lock.release()
-                elif self.city_name.zombie_queue / self.city_name.population < 0.75 and self.city_name.zombie_queue / self.city_name.population >= 0.5:
+                elif 0.75 > self.city_name.zombie_queue / (self.city_name.zombie_queue + self.city_name.healthy_queue) >= 0.5:
                     num_infected = random.randrange(5, 20)
+                    self.city_name.zombie_queue_lock.acquire()
                     queue_positions = random.randrange(len(self.city_name.zombie_queue))
+                    self.city_name.zombie_queue_lock.release()
                     for i in range(num_infected):
                         self.city_name.zombie_queue_lock.acquire()
                         moving = self.city_name.zombie_queue.pop(queue_positions)
@@ -265,9 +269,11 @@ class Medic:
                         self.city_name.healthy_queue_lock.acquire()
                         self.city_name.healthy_queue.append(moving)
                         self.city_name.healthy_queue_lock.release()
-                elif self.city_name.zombie_queue / self.city_name.population < 0.5 and self.city_name.zombie_queue / self.city_name.population >= 0.25:
+                elif 0.5 > self.city_name.zombie_queue / (self.city_name.zombie_queue + self.city_name.healthy_queue) >= 0.25:
                     num_infected = random.randrange(3, 15)
+                    self.city_name.zombie_queue_lock.acquire()
                     queue_positions = random.randrange(len(self.city_name.zombie_queue))
+                    self.city_name.zombie_queue_lock.release()
                     for i in range(num_infected):
                         self.city_name.zombie_queue_lock.acquire()
                         moving = self.city_name.zombie_queue.pop(queue_positions)
