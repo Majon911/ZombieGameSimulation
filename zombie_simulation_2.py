@@ -389,7 +389,9 @@ class zombie_swarm:
                 print("There is a zombie swarm in ", {self.name}, "!")
                 for x in range(0, self.people_dead):
                     i = self.healthy_queue.pop(0)
+                    self.zombie_queue.lock_aquire()
                     self.zombie_queue.append(i)
+                    self.zomie_queue.lock_release()
                 print(self.people_dead, "people have become zombies!")
 
 
@@ -409,12 +411,16 @@ class natural_disaster:
         if len(self.healthy_queue) > 5:
             for x in range(0,math.floor(len(self.healthy_queue) / 2)):
                 i = self.healthy_queue.pop(0)
+                self.dead_queue.lock_append()
                 self.dead_queue.append(i)
+                self.dead_queue.lock_release()
                 self.casualties = x
         if len(self.zombie_queue) > 5:
             for x in range(0,math.floor(len(self.zombie_queue) / 2)):
                 i = self.zombie_queue.pop(0)
+                self.dead_queue.lock_append()
                 self.dead_queue.append(i)
+                self.dead_queue.lock_release()
                 self.casualties = x
         print(self.casualties, "casualties", "in ", f"{self.name}")
         self.casualties = 0
@@ -436,7 +442,7 @@ def day_sim(day_number):
     print("\n--Today is day number", day_number, "--")
     global map
     z = random.randint(0, len(map) - 1)
-    city_instance = map[z]# or any other city instance you want to use
+    city_instance = map[z]
     plague_instance = plague_inc(city_instance)
     plague_instance.prompts()
     disaster_instance = natural_disaster(city_instance)
