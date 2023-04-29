@@ -5,14 +5,14 @@ import concurrent.futures
 citizen_queue_init = []
 citizen_id = 0
 for i in range(1000):
-    city_prob = random.choices(["Mackers City", 'Gulans Town', 'Nogales Village', 'Albono Hills', 'Zeidel Borough'], [3, 2, 2, 1, 2])
+    city_prob = random.choices([zs.MackersCity, zs.GulansTown, zs.NogalesVillage, zs.AlbonoHills, zs.ZeidelBorough], [3, 2, 2, 1, 2])
     citizen_queue_init.append(zs.Citizen(citizen_id, city_prob))
     citizen_id = citizen_id + 1
 
 military_queue_init = []
 military_id = 0
 for i in range(100):
-    city_prob = random.choices(["Mackers City", 'Gulans Town', 'Nogales Village', 'Albono Hills', 'Zeidel Borough'], [3, 2, 2, 1, 2])
+    city_prob = random.choices([zs.MackersCity, zs.GulansTown, zs.NogalesVillage, zs.AlbonoHills, zs.ZeidelBorough], [3, 2, 2, 1, 2])
     mtype = random.choices(["Soldier", "Soldier Armoured", "Tank", "Plane"], [5, 4, 2, 1])
     mrank = random.choices([1, 2, 3], [6, 3, 1])
     military_queue_init.append(zs.Military(military_id, mtype, mrank, city_prob))
@@ -21,7 +21,7 @@ for i in range(100):
 medic_queue_init = []
 medic_id = 0
 for i in range(50):
-    city_prob = random.choices(["Mackers City", 'Gulans Town', 'Nogales Village', 'Albono Hills', 'Zeidel Borough'], [3, 2, 2, 1, 2])
+    city_prob = random.choices([zs.MackersCity, zs.GulansTown, zs.NogalesVillage, zs.AlbonoHills, zs.ZeidelBorough], [3, 2, 2, 1, 2])
     medic_queue_init.append(zs.Medic(medic_id, "Medic", city_prob))
     medic_id = medic_id + 1
 
