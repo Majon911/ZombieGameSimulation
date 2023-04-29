@@ -251,7 +251,7 @@ class Medic:
                         self.city_name.healthy_queue_lock.acquire()
                         self.city_name.healthy_queue.append(moving)
                         self.city_name.healthy_queue_lock.release()
-
+            time.sleep(2)
     def medic_zombify(self):
         while True:
             if self.alive == False:
