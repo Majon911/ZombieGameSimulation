@@ -37,6 +37,7 @@ class Military:
                             self.city_name.zombie_queue_lock.acquire()
                             moving = self.city_name.zombie_queue.pop(queue_positions)
                             self.city_name.zombie_queue_lock.release()
+                            print("Military", self.id, self.type, "killed", moving.job, moving.id)
                             moving.alive = False
                             self.city_name.dead_queue_lock.acquire()
                             self.city_name.dead_queue.append(moving)
@@ -212,7 +213,6 @@ class Military:
                             time.sleep(2)
                 if self.infected:
                     print("Military personnel", self.id, "has been infected! ")
-                    # print(self.city_name.name, "is in danger.")
                     self.city_name.healthy_queue.acquire()
                     citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
                     self.city_name.healthy_queue.release()
@@ -225,6 +225,7 @@ class Military:
         except Exception as e:
             print("There was an error: MILITARY")
             logging.error(traceback.format_exc())
+            print(e)
 
 # Medics class
 class Medic:
@@ -248,7 +249,7 @@ class Medic:
                     break
                 if self.type == "Medic":
                     self.city_name.zombie_queue_lock.acquire()
-                    if self.city_name.zombie_queue / (self.city_name.zombie_queue + self.city_name.healthy_queue) >= 0.75:
+                    if len(self.city_name.zombie_queue) / (len(self.city_name.zombie_queue) + len(self.city_name.healthy_queue)) >= 0.75:
                         self.city_name.zombie_queue_lock.release()
                         num_infected = random.randrange(7, 25)
                         self.city_name.zombie_queue_lock.acquire()
@@ -263,7 +264,7 @@ class Medic:
                             self.city_name.healthy_queue.append(moving)
                             self.city_name.healthy_queue_lock.release()
                             time.sleep(2)
-                    elif 0.75 > self.city_name.zombie_queue / (self.city_name.zombie_queue + self.city_name.healthy_queue) >= 0.5:
+                    elif 0.75 > len(self.city_name.zombie_queue) / (len(self.city_name.zombie_queue) + len(self.city_name.healthy_queue)) >= 0.5:
                         self.city_name.zombie_queue_lock.release()
                         num_infected = random.randrange(5, 20)
                         self.city_name.zombie_queue_lock.acquire()
@@ -278,7 +279,7 @@ class Medic:
                             self.city_name.healthy_queue.append(moving)
                             self.city_name.healthy_queue_lock.release()
                             time.sleep(2)
-                    elif 0.5 > self.city_name.zombie_queue / (self.city_name.zombie_queue + self.city_name.healthy_queue) >= 0.25:
+                    elif 0.5 > len(self.city_name.zombie_queue) / (len(self.city_name.zombie_queue) + len(self.city_name.healthy_queue)) >= 0.25:
                         self.city_name.zombie_queue_lock.release()
                         num_infected = random.randrange(3, 15)
                         self.city_name.zombie_queue_lock.acquire()
@@ -295,7 +296,6 @@ class Medic:
                             time.sleep(2)
                 if self.infected:
                     print("Medic", self.id, "has been infected! ")
-                    # print(self.city_name.name, "is in danger.")
                     self.city_name.healthy_queue.acquire()
                     citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
                     self.city_name.healthy_queue.release()
@@ -308,6 +308,7 @@ class Medic:
         except Exception as e:
             print("There was an error: MEDIC")
             logging.error(traceback.format_exc())
+            print(e)
 
 
 class City:
@@ -407,14 +408,17 @@ for i in range(50):
 
 
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
-    for citizen in citizen_queue_init:
-        executor.submit(citizen.zombify)
-
-with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
-    for personnel in military_queue_init:
-        executor.submit(personnel.zombie_destruction)
-
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
         executor.submit(medic.zombie_cure)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+        for personnel in military_queue_init:
+            executor.submit(personnel.zombie_destruction)
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
+            for citizen in citizen_queue_init:
+                executor.submit(citizen.zombify)
+
+
+
