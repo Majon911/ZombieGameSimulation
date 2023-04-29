@@ -221,7 +221,8 @@ class Military:
                 if self.infected:
                     print("Military personnel", self.id, "has been infected! ")
                     self.city_name.healthy_queue.acquire()
-                    citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
+                    # citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
+                    citizen = random.choice(self.city_name.healthy_queue)
                     self.city_name.healthy_queue.release()
                     citizen.infected = True
                     self.city_name.zombie_queue_lock.acquire()
@@ -427,6 +428,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
         with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
             for citizen in citizen_queue_init:
                 executor.submit(citizen.zombify)
+
 
 
 
