@@ -235,7 +235,6 @@ class Military:
             print(e)
 
 # Medics class
-# Medics class
 class Medic:
     def __init__(self, id, type, city_name):
         self.id = id
