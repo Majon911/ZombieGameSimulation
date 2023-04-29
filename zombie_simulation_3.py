@@ -347,12 +347,13 @@ class Citizen:
                 if self.alive == False:
                     break
                 if self.infected:
-                    print("Citizen", self.id, "has been infected! ")
+                    print("Citizen", self.id, "has been infected in", self.city_name.name)
                     # print(self.city_name.name, "is in danger.")
                     self.city_name.healthy_queue_lock.acquire()
                     citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
                     self.city_name.healthy_queue_lock.release()
                     citizen.infected = True
+                    print("Citizen", self.id, "INFECTED citizen", citizen.id)
                     self.city_name.zombie_queue_lock.acquire()
                     self.city_name.zombie_queue.append(citizen)
                     self.city_name.zombie_queue_lock.release()
