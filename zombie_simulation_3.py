@@ -31,6 +31,7 @@ class Military:
                 self.city_name.zombie_queue_lock.acquire()
                 if len(self.city_name.zombie_queue) <= 45:
                     self.city_name.zombie_queue_lock.release()
+                    print("Military disactivated!")
                     time.sleep(5)
                 elif len(self.city_name.zombie_queue) > 45:
                     self.city_name.zombie_queue_lock.release()
@@ -301,6 +302,10 @@ class Medic:
                             self.city_name.healthy_queue.append(moving)
                             self.city_name.healthy_queue_lock.release()
                             time.sleep(2)
+                    else:
+                        self.city_name.zombie_queue_lock.release()
+                        print("No need for medics yet!")
+                        time.sleep(5)
                 if self.infected:
                     print("Medic", self.id, "has been infected! ")
                     self.city_name.healthy_queue.acquire()
@@ -415,30 +420,30 @@ for i in range(10):
 
 
 
-# with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-#     for medic in medic_queue_init:
-#         executor.submit(medic.zombie_cure)
-#         print(f"{medic.job, medic.id}, is now WORKING!")
-#
-#     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
-#         for personnel in military_queue_init:
-#             executor.submit(personnel.zombie_destruction)
-#             print(f"{personnel.job, personnel.id}, is now WORKING!")
-#
-#         with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-#             for citizen in citizen_queue_init:
-#                 executor.submit(citizen.zombify)
-#                 print(f"{citizen.job, citizen.id}, is now WORKING!")
+with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    for medic in medic_queue_init:
+        executor.submit(medic.zombie_cure)
+        print(f"{medic.job, medic.id}, is now WORKING!")
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-    for citizen in citizen_queue_init:
-        executor.submit(citizen.zombify)
-        print(f"{citizen.job, citizen.id}, is now WORKING!")
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         for personnel in military_queue_init:
             executor.submit(personnel.zombie_destruction)
             print(f"{personnel.job, personnel.id}, is now WORKING!")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-            for medic in medic_queue_init:
-                executor.submit(medic.zombie_cure)
-                print(f"{medic.job, medic.id}, is now WORKING!")
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
+            for citizen in citizen_queue_init:
+                executor.submit(citizen.zombify)
+                print(f"{citizen.job, citizen.id}, is now WORKING!")
+
+# with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
+#     for citizen in citizen_queue_init:
+#         executor.submit(citizen.zombify)
+#         print(f"{citizen.job, citizen.id}, is now WORKING!")
+#     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+#         for personnel in military_queue_init:
+#             executor.submit(personnel.zombie_destruction)
+#             print(f"{personnel.job, personnel.id}, is now WORKING!")
+#         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+#             for medic in medic_queue_init:
+#                 executor.submit(medic.zombie_cure)
+#                 print(f"{medic.job, medic.id}, is now WORKING!")
