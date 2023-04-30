@@ -222,7 +222,7 @@ class Military:
                 if self.infected:
                     print("Military personnel", self.id, "has been infected! ")
                     self.city_name.healthy_queue_lock.acquire()
-                    citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
+                    citizen = random.choice(self.city_name.healthy_queue)
                     self.city_name.healthy_queue_lock.release()
                     citizen.infected = True
                     self.city_name.zombie_queue_lock.acquire()
@@ -261,12 +261,12 @@ class Medic:
                         self.city_name.zombie_queue_lock.release()
                         num_infected = random.randrange(7, 25)
                         self.city_name.zombie_queue_lock.acquire()
-                        queue_positions = random.randrange(len(self.city_name.zombie_queue))
                         self.city_name.zombie_queue_lock.release()
                         for i in range(num_infected):
                             self.city_name.zombie_queue_lock.acquire()
-                            moving = self.city_name.zombie_queue.pop(queue_positions)
+                            moving = random.choice(self.city_name.zombie_queue)
                             self.city_name.zombie_queue_lock.release()
+                            print(moving.job, moving.id, "has been cured! ")
                             moving.alive = True
                             self.city_name.healthy_queue_lock.acquire()
                             self.city_name.healthy_queue.append(moving)
@@ -276,12 +276,12 @@ class Medic:
                         self.city_name.zombie_queue_lock.release()
                         num_infected = random.randrange(5, 20)
                         self.city_name.zombie_queue_lock.acquire()
-                        queue_positions = random.randrange(len(self.city_name.zombie_queue))
                         self.city_name.zombie_queue_lock.release()
                         for i in range(num_infected):
                             self.city_name.zombie_queue_lock.acquire()
-                            moving = self.city_name.zombie_queue.pop(queue_positions)
+                            moving = random.choice(self.city_name.zombie_queue)
                             self.city_name.zombie_queue_lock.release()
+                            print(moving.job, moving.id, "has been cured! ")
                             moving.alive = True
                             self.city_name.healthy_queue_lock.acquire()
                             self.city_name.healthy_queue.append(moving)
@@ -291,12 +291,12 @@ class Medic:
                         self.city_name.zombie_queue_lock.release()
                         num_infected = random.randrange(3, 15)
                         self.city_name.zombie_queue_lock.acquire()
-                        queue_positions = random.randrange(len(self.city_name.zombie_queue))
                         self.city_name.zombie_queue_lock.release()
                         for i in range(num_infected):
                             self.city_name.zombie_queue_lock.acquire()
-                            moving = self.city_name.zombie_queue.pop(queue_positions)
+                            moving = random.choice(self.city_name.zombie_queue)
                             self.city_name.zombie_queue_lock.release()
+                            print(moving.job, moving.id, "has been cured! ")
                             moving.alive = True
                             self.city_name.healthy_queue_lock.acquire()
                             self.city_name.healthy_queue.append(moving)
@@ -308,9 +308,9 @@ class Medic:
                         time.sleep(5)
                 if self.infected:
                     print("Medic", self.id, "has been infected! ")
-                    self.city_name.healthy_queue.acquire()
-                    citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
-                    self.city_name.healthy_queue.release()
+                    self.city_name.healthy_queue_lock.acquire()
+                    citizen = random.choice(self.city_name.healthy_queue)
+                    self.city_name.healthy_queue_lock.release()
                     citizen.infected = True
                     self.city_name.zombie_queue_lock.acquire()
                     self.city_name.zombie_queue.append(citizen)
@@ -366,7 +366,7 @@ class Citizen:
                     print("Citizen", self.id, "has been infected in", self.city_name.name)
                     # print(self.city_name.name, "is in danger.")
                     self.city_name.healthy_queue_lock.acquire()
-                    citizen = self.city_name.healthy_queue.pop(random.randrange(len(self.city_name.healthy_queue)))
+                    citizen = random.choice(self.city_name.healthy_queue)
                     self.city_name.healthy_queue_lock.release()
                     citizen.infected = True
                     print("Citizen", self.id, "INFECTED", citizen.job, citizen.id)
