@@ -372,11 +372,6 @@ for i in range(50):
     medic_queue_init.append(Medic(medic_id, "Medic", city_prob))
     medic_id = medic_id + 1
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor3:
-    for citizen in citizen_queue_init:
-        print(f"{citizen.job, citizen.id}, is now WORKING!")
-        executor3.submit(citizen.zombify)
-
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
         executor.submit(medic.zombie_cure)
@@ -386,6 +381,11 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
         for personnel in military_queue_init:
             executor2.submit(personnel.zombie_destruction)
             print(f"{personnel.job, personnel.id}, is now WORKING!")
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor3:
+            for citizen in citizen_queue_init:
+                print(f"{citizen.job, citizen.id}, is now WORKING!")
+                executor3.submit(citizen.zombify)
 
 
 
