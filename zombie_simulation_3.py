@@ -300,23 +300,21 @@ class Citizen:
         self.infected = False
         self.city_name = city_name
         self.job = "Civil"
+        choice1 = random.choices(["healthy", "infected"], [18, 2])[0]
+        if choice1 == "healthy":
+            self.city_name.healthy_queue_lock.acquire()
+            self.city_name.healthy_queue.append(self)
+            self.city_name.healthy_queue_lock.release()
+        elif choice1 == "infected":
+            self.city_name.zombie_queue_lock.acquire()
+            self.city_name.zombie_queue.append(self)
+            self.city_name.zombie_queue_lock.release()
+            self.infected = True
+        print("Citizen", self.id, "was created in", self.city_name.name)
 
     def zombify(self):
         try:
-            while True:
-                choice1 = random.choices(["healthy", "infected"], [18, 2])[0]
-                if choice1 == "healthy":
-                    self.city_name.healthy_queue_lock.acquire()
-                    self.city_name.healthy_queue.append(self)
-                    self.city_name.healthy_queue_lock.release()
-                elif choice1 == "infected":
-                    self.city_name.zombie_queue_lock.acquire()
-                    self.city_name.zombie_queue.append(self)
-                    self.city_name.zombie_queue_lock.release()
-                    self.infected = True
-                print("Citizen", self.id, "was created in", self.city_name.name)
-                if self.alive == False:
-                    break
+            while self.alive:
                 if self.infected:
                     print("Citizen", self.id, "has been infected in", self.city_name.name)
                     # print(self.city_name.name, "is in danger.")
@@ -329,10 +327,11 @@ class Citizen:
                     self.city_name.zombie_queue.append(citizen)
                     self.city_name.zombie_queue_lock.release()
                     time.sleep(2)
+                time.sleep(.5)
 
         except Exception as e:
             print("There was an error: CITIZEN")
-            print(e)
+            traceback.print_exc()
             logging.error(traceback.format_exc())
 
 
@@ -373,22 +372,22 @@ for i in range(50):
     medic_queue_init.append(Medic(medic_id, "Medic", city_prob))
     medic_id = medic_id + 1
 
-
-
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
         executor.submit(medic.zombie_cure)
         print(f"{medic.job, medic.id}, is now WORKING!")
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor2:
         for personnel in military_queue_init:
-            executor.submit(personnel.zombie_destruction)
+            executor2.submit(personnel.zombie_destruction)
             print(f"{personnel.job, personnel.id}, is now WORKING!")
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor3:
             for citizen in citizen_queue_init:
-                executor.submit(citizen.zombify)
                 print(f"{citizen.job, citizen.id}, is now WORKING!")
+                executor3.submit(citizen.zombify)
+
+
 
 # with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
 #     for citizen in citizen_queue_init:
