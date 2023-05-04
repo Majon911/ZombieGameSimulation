@@ -334,7 +334,7 @@ class Citizen:
             traceback.print_exc()
             logging.error(traceback.format_exc())
 
-class plague_inc:
+class Plague_inc:
     def __init__(self, id, city):
         self.id = id
         self.city = city
@@ -355,18 +355,22 @@ class plague_inc:
                 print("News: ")
                 self.city.zombie_queue_lock.release()
                 print(random.choice(self.prompts_healthy))
+                time.sleep(0.5)
             elif len(self.city.zombie_queue) < 50:
                 print("News: ")
                 self.city.zombie_queue_lock.release()
                 print(random.choice(self.prompts_low_concern))
+                time.sleep(0.5)
             elif len(self.city.zombie_queue) < 100:
                 print("News: ")
                 self.city.zombie_queue_lock.release()
                 print(random.choice(self.prompts_high_concern))
+                time.sleep(0.5)
             else:
                 print("News: ")
                 self.city.zombie_queue_lock.release()
                 print(random.choice(self.prompts_defeat))
+                time.sleep(0.5)
             time.sleep(5)
 
 
@@ -411,7 +415,7 @@ for i in range(50):
 news_queue_init = []
 news_id = 0
 for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
-    news_queue_init.append(plague_inc(news_id, i))
+    news_queue_init.append(Plague_inc(news_id, i))
     news_id = news_id + 1
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
@@ -432,7 +436,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
             with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor4:
                 for news in news_queue_init:
                     print(f"{news.id} in, {news.city.name}, is now WORKING!")
-                    executor4.submit(plague_inc.prompts)
+                    executor4.submit(news.prompts)
 
 # with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
 #     for citizen in citizen_queue_init:
