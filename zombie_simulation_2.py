@@ -391,7 +391,7 @@ class zombie_swarm:
                     i = self.healthy_queue.pop(0)
                     self.zombie_queue.lock_aquire()
                     self.zombie_queue.append(i)
-                    self.zomie_queue.lock_release()
+                    self.zombie_queue.lock_release()
                 print(self.people_dead, "people have become zombies!")
 
 
@@ -425,6 +425,28 @@ class natural_disaster:
         print(self.casualties, "casualties", "in ", f"{self.name}")
         self.casualties = 0
 
+class hospital_health():
+    def __init__(self, city_instance, medic_instance):
+
+        self.name = city_instance.name
+        self.zombie_queue = city_instance.zombie_queue
+        self.healthy_queue = city_instance.healthy_queue
+        self.health_level = 100
+        self.val = medic_instance.val
+
+    def hospital_status(self):
+        if self.health_level == 100:
+            print(f"Hospital in {self.name} at {self.health_level}% capacity")
+        if len(zombie_queue) % 50 == 0:
+            self.health_level -= 20
+            print(f"Hospital in {self.name} at {self.health_level}% capacity")
+        #if self.health_level == 0:
+            #Medics cease to function
+
+
+
+
+
 
 
 
@@ -449,6 +471,11 @@ def day_sim(day_number):
     chances = random.randint(0,3)
     if chances == 2:
         disaster_instance.disaster_function()
+    swarm_instance = zombie_swarm(city_instance)
+    swarm_instance.swarm()
+
+    # hospital_instance = hospital_health(city_instance)
+    # hospital_instance.hospital_status()
 
 
 #def non_zombie_fatalities
