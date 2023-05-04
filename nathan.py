@@ -344,35 +344,38 @@ class Plague_inc:
         self.prompts_defeat = ["Few humans remain", f"Woman tries to marry zombie in {self.city.name}, becomes infected", "Government has ceased to function", "Zombies begin to starve", "FOX news blames Obama", f"Nuclear Reactor in {self.city.name} breaks down"]
 
     def prompts(self):
-        while True:
-            self.city.healthy_queue_lock.aqcuire()
-            if len(self.city.healthy_queue) == 0:
+        try:
+            while True:
+                self.city.healthy_queue_lock.acquire()
+                if len(self.city.healthy_queue) == 0:
+                    print('News Outlets Run By Zombies')
+                    self.city.healthy_queue_lock.release()
+                    break
                 self.city.healthy_queue_lock.release()
-                break
-            self.city.healthy_queue_lock.release()
-            self.city.zombie_queue_lock.aqcuire()
-            if len(self.city.zombie_queue) < 5:
-                print("News: ")
-                self.city.zombie_queue_lock.release()
-                print(random.choice(self.prompts_healthy))
-                time.sleep(0.5)
-            elif len(self.city.zombie_queue) < 50:
-                print("News: ")
-                self.city.zombie_queue_lock.release()
-                print(random.choice(self.prompts_low_concern))
-                time.sleep(0.5)
-            elif len(self.city.zombie_queue) < 100:
-                print("News: ")
-                self.city.zombie_queue_lock.release()
-                print(random.choice(self.prompts_high_concern))
-                time.sleep(0.5)
-            else:
-                print("News: ")
-                self.city.zombie_queue_lock.release()
-                print(random.choice(self.prompts_defeat))
-                time.sleep(0.5)
-            time.sleep(5)
-
+                self.city.zombie_queue_lock.acquire()
+                if len(self.city.zombie_queue) < 5:
+                    print("News: ")
+                    self.city.zombie_queue_lock.release()
+                    print(random.choice(self.prompts_healthy))
+                    time.sleep(0.5)
+                elif len(self.city.zombie_queue) < 50:
+                    print("News: ")
+                    self.city.zombie_queue_lock.release()
+                    print(random.choice(self.prompts_low_concern))
+                    time.sleep(0.5)
+                elif len(self.city.zombie_queue) < 100:
+                    print("News: ")
+                    self.city.zombie_queue_lock.release()
+                    print(random.choice(self.prompts_high_concern))
+                    time.sleep(0.5)
+                else:
+                    print("News: ")
+                    self.city.zombie_queue_lock.release()
+                    print(random.choice(self.prompts_defeat))
+                    time.sleep(0.5)
+                time.sleep(5)
+        except Exception:
+            traceback.print_exc()
 
 
 # Creating the map / cities
