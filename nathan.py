@@ -3,7 +3,7 @@ import threading
 import time
 # import webbrowser
 import random
-# import math
+import math
 import concurrent.futures
 import traceback
 
@@ -377,6 +377,48 @@ class Plague_inc:
         except Exception:
             traceback.print_exc()
 
+class Natural_disaster:
+    def __init__(self, id, city):
+        self.id = id
+        self.city = city
+        # self.name = city.name
+        # self.zombie_queue = city.zombie_queue
+        # self.healthy_queue = city.healthy_queue
+        # self.dead_queue = city.dead_queue
+        self.disaster = ['fire', 'flood', 'tornado', 'earthquake', 'epidemic']
+        self.casualties = 0
+
+
+    def disaster_function(self):
+        try:
+            while True:
+                if len(self.city.healthy_queue + self.city.zombie_queue) > 10:
+                    choice_of_disaster = random.choice(self.disaster)
+                    print("Disaster: ")
+                    print("\nA", choice_of_disaster,  f"has occured in {self.city.name}!")
+                    if len(self.city.healthy_queue) > 5:
+                        for x in range(0,math.floor(len(self.city.healthy_queue) / 2)):
+                            self.city.dead_queue_lock.acquire() #
+                            self.city.healthy_queue_lock.acquire() #
+                            i = self.city.healthy_queue.pop(0)
+                            self.city.dead_queue.append(i)
+                            self.city.healthy_queue_lock.release() #
+                            self.city.dead_queue_lock.release()#
+                            self.casualties = x
+                    if len(self.city.zombie_queue) > 5:
+                        for x in range(0,math.floor(len(self.city.zombie_queue) / 2)):
+                            self.city.dead_queue_lock.acquire() #
+                            self.city.healthy_queue_lock.acquire() #
+                            i = self.city.zombie_queue.pop(0)
+                            self.city.dead_queue.append(i)
+                            self.city.healthy_queue_lock.release() #
+                            self.city.dead_queue_lock.release() #
+                            self.casualties = x
+                    print("\n", self.casualties, "casualties", "in ", f"{self.city.name}")
+                    self.casualties = 0
+        except Exception:
+            traceback.print_exc()
+
 
 # Creating the map / cities
 MackersCity = City("Mackers City", random.randrange(500, 1001))
@@ -421,6 +463,12 @@ for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
     news_queue_init.append(Plague_inc(news_id, i))
     news_id = news_id + 1
 
+natural_disaster_init = []
+natural_id = 0
+for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
+    natural_disaster_init.append(Natural_disaster(natural_id, i))
+    natural_id = natural_id + 1
+
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
         executor.submit(medic.zombie_cure)
@@ -440,6 +488,11 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
                 for news in news_queue_init:
                     print(f"{news.id} in, {news.city.name}, is now WORKING!")
                     executor4.submit(news.prompts)
+
+                with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor5:
+                    for disaster in natural_disaster_init:
+                        print(f"{disaster.id} in, {disaster.city.name}, is now WORKING!")
+                        executor5.submit(disaster.disaster_function)
 
 # with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
 #     for citizen in citizen_queue_init:
