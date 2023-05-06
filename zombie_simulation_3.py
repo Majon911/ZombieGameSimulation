@@ -1,11 +1,10 @@
 import logging
 import threading
 import time
-# import webbrowser
 import random
-import math
 import concurrent.futures
 import traceback
+import mysql.connector #
 
 
 class Military:
@@ -41,158 +40,171 @@ class Military:
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 2:
                             num_zombies = random.randrange(1, 10)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 3:
                             num_zombies = random.randrange(1, 15)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                     elif self.type == "Soldier Armoured":
                         if self.rank == 1:
                             num_zombies = random.randrange(1, 10)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 2:
                             num_zombies = random.randrange(1, 15)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 3:
                             num_zombies = random.randrange(1, 20)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                     elif self.type == "Tank":
                         if self.rank == 1:
                             num_zombies = random.randrange(1, 15)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 2:
                             num_zombies = random.randrange(1, 25)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 3:
                             num_zombies = random.randrange(1, 35)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                     elif self.type == "Plane":
                         if self.rank == 1:
                             num_zombies = random.randrange(1, 20)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 2:
                             num_zombies = random.randrange(1, 30)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                         elif self.rank == 3:
                             num_zombies = random.randrange(1, 40)
                             for i in range(num_zombies):
                                 self.city_name.zombie_queue_lock.acquire()
                                 moving = random.choice(self.city_name.zombie_queue)
+                                self.city_name.zombie_queue.remove(moving)
                                 self.city_name.zombie_queue_lock.release()
                                 print("Military", self.id, self.type, "killed", moving.job, moving.id)
                                 moving.alive = False
                                 self.city_name.dead_queue_lock.acquire()
                                 self.city_name.dead_queue.append(moving)
                                 self.city_name.dead_queue_lock.release()
-                                time.sleep(2)
+                                time.sleep(10)
                 if self.infected:
                     print("Military personnel", self.id, "has been infected! ")
                     self.city_name.healthy_queue_lock.acquire()
                     citizen = random.choice(self.city_name.healthy_queue)
+                    self.city_name.healthy_queue.remove(citizen)
                     self.city_name.healthy_queue_lock.release()
                     citizen.infected = True
                     self.city_name.zombie_queue_lock.acquire()
                     self.city_name.zombie_queue.append(citizen)
                     self.city_name.zombie_queue_lock.release()
-                    time.sleep(2)
+                    time.sleep(10)
 
         except Exception as e:
             print("There was an error: MILITARY")
@@ -227,9 +239,10 @@ class Medic:
                         for i in range(num_infected):
                             self.city_name.zombie_queue_lock.acquire()
                             moving = random.choice(self.city_name.zombie_queue)
+                            self.city_name.zombie_queue.remove(moving)
                             self.city_name.zombie_queue_lock.release()
                             print(moving.job, moving.id, "has been cured! ")
-                            moving.alive = True
+                            moving.infected = False
                             self.city_name.healthy_queue_lock.acquire()
                             self.city_name.healthy_queue.append(moving)
                             self.city_name.healthy_queue_lock.release()
@@ -240,9 +253,10 @@ class Medic:
                         for i in range(num_infected):
                             self.city_name.zombie_queue_lock.acquire()
                             moving = random.choice(self.city_name.zombie_queue)
+                            self.city_name.zombie_queue.remove(moving)
                             self.city_name.zombie_queue_lock.release()
                             print(moving.job, moving.id, "has been cured! ")
-                            moving.alive = True
+                            moving.infected = False
                             self.city_name.healthy_queue_lock.acquire()
                             self.city_name.healthy_queue.append(moving)
                             self.city_name.healthy_queue_lock.release()
@@ -253,9 +267,10 @@ class Medic:
                         for i in range(num_infected):
                             self.city_name.zombie_queue_lock.acquire()
                             moving = random.choice(self.city_name.zombie_queue)
+                            self.city_name.zombie_queue.remove(moving)
                             self.city_name.zombie_queue_lock.release()
                             print(moving.job, moving.id, "has been cured! ")
-                            moving.alive = True
+                            moving.infected = False
                             self.city_name.healthy_queue_lock.acquire()
                             self.city_name.healthy_queue.append(moving)
                             self.city_name.healthy_queue_lock.release()
@@ -268,12 +283,13 @@ class Medic:
                     print("Medic", self.id, "has been infected! ")
                     self.city_name.healthy_queue_lock.acquire()
                     citizen = random.choice(self.city_name.healthy_queue)
+                    self.city_name.healthy_queue.remove(citizen)
                     self.city_name.healthy_queue_lock.release()
                     citizen.infected = True
                     self.city_name.zombie_queue_lock.acquire()
                     self.city_name.zombie_queue.append(citizen)
                     self.city_name.zombie_queue_lock.release()
-                    time.sleep(2)
+                    time.sleep(10)
 
         except Exception as e:
             print("There was an error: MEDIC")
@@ -300,7 +316,7 @@ class Citizen:
         self.infected = False
         self.city_name = city_name
         self.job = "Civil"
-        choice1 = random.choices(["healthy", "infected"], [18, 2])[0]
+        choice1 = random.choices(["healthy", "infected"], [99, 1])[0]
         if choice1 == "healthy":
             self.city_name.healthy_queue_lock.acquire()
             self.city_name.healthy_queue.append(self)
@@ -317,16 +333,24 @@ class Citizen:
             while self.alive:
                 if self.infected:
                     print("Citizen", self.id, "has been infected in", self.city_name.name)
-                    # print(self.city_name.name, "is in danger.")
-                    self.city_name.healthy_queue_lock.acquire()
-                    citizen = random.choice(self.city_name.healthy_queue)
-                    self.city_name.healthy_queue_lock.release()
-                    citizen.infected = True
-                    print("Citizen", self.id, "INFECTED", citizen.job, citizen.id)
-                    self.city_name.zombie_queue_lock.acquire()
-                    self.city_name.zombie_queue.append(citizen)
-                    self.city_name.zombie_queue_lock.release()
-                    time.sleep(2)
+                    chance = random.choice([1, 0])
+                    if chance == 1:
+                        self.city_name.healthy_queue_lock.acquire()
+                        if self.city_name.healthy_queue:
+                            citizen = random.choice(self.city_name.healthy_queue)
+                            self.city_name.healthy_queue.remove(citizen)
+                            self.city_name.healthy_queue_lock.release()
+                            citizen.infected = True
+                            print("Citizen", self.id, "INFECTED", citizen.job, citizen.id)
+                            self.city_name.zombie_queue_lock.acquire()
+                            self.city_name.zombie_queue.append(citizen)
+                            self.city_name.zombie_queue_lock.release()
+                        else:
+                            print("No more healthy in", self.city_name.name)
+                            break
+                        time.sleep(10)
+                    else:
+                        pass
                 time.sleep(.5)
 
         except Exception as e:
@@ -376,47 +400,56 @@ class Plague_inc:
                 time.sleep(5)
         except Exception:
             traceback.print_exc()
-class Natural_disaster:
-    def __init__(self, id, city):
-        self.id = id
+
+
+
+class SQL:
+    def __init__(self, city):
         self.city = city
-        # self.name = city.name
-        # self.zombie_queue = city.zombie_queue
-        # self.healthy_queue = city.healthy_queue
-        # self.dead_queue = city.dead_queue
-        self.disaster = ['fire', 'flood', 'tornado', 'earthquake', 'epidemic']
-        self.casualties = 0
 
 
-    def disaster_function(self):
-        try:
-            while True:
-                if len(self.city.healthy_queue + self.city.zombie_queue) > 10:
-                    choice_of_disaster = random.choice(self.disaster)
-                    print("Disaster: ")
-                    print("\nA", choice_of_disaster,  f"has occured in {self.city.name}!")
-                    if len(self.city.healthy_queue) > 5:
-                        for x in range(0,math.floor(len(self.city.healthy_queue) / 2)):
-                            self.city.dead_queue_lock.acquire() #
-                            self.city.healthy_queue_lock.acquire() #
-                            i = self.city.healthy_queue.pop(0)
-                            self.city.dead_queue.append(i)
-                            self.city.healthy_queue_lock.release() #
-                            self.city.dead_queue_lock.release()#
-                            self.casualties = x
-                    if len(self.city.zombie_queue) > 5:
-                        for x in range(0,math.floor(len(self.city.zombie_queue) / 2)):
-                            self.city.dead_queue_lock.acquire() #
-                            self.city.healthy_queue_lock.acquire() #
-                            i = self.city.zombie_queue.pop(0)
-                            self.city.dead_queue.append(i)
-                            self.city.healthy_queue_lock.release() #
-                            self.city.dead_queue_lock.release() #
-                            self.casualties = x
-                    print("\n", self.casualties, "casualties", "in ", f"{self.city.name}")
-                    self.casualties = 0
-        except Exception:
-            traceback.print_exc()
+    def record(self):
+        while True:
+            cnx = mysql.connector.connect(
+                host='localhost',
+                user='root',
+                passwd='Baumann1',
+                database='ZombieSimulation'
+            )
+
+            cursor = cnx.cursor()
+            query = "INSERT INTO statistics (Time, City_Name, Healthy, Zombies, Dead, Civil,  Military, Medics) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            self.city.healthy_queue_lock.acquire()
+            self.city.zombie_queue_lock.acquire()
+            self.city.dead_queue_lock.acquire()
+            military = 0
+            medics = 0
+            civils = 0
+            for healthy in self.city.healthy_queue:
+                if healthy.job == 'Military':
+                    military += 1
+                elif healthy.job == 'Medic':
+                    medics += 1
+                else:
+                    civils += 1
+
+            values = (time.time(), self.city.name, len(self.city.healthy_queue), len(self.city.zombie_queue),
+                      len(self.city.dead_queue), civils, military, medics )
+            self.city.healthy_queue_lock.release()
+            self.city.zombie_queue_lock.release()
+            self.city.dead_queue_lock.release()
+            cursor.execute(query, values)
+            cnx.commit()
+
+            self.city.healthy_queue_lock.acquire()
+            if len(self.city.healthy_queue) == 0:
+                self.city.healthy_queue_lock.release()
+                break
+            self.city.healthy_queue_lock.release()
+            time.sleep(0.5)
+
+
+
 
 # Creating the map / cities
 MackersCity = City("Mackers City", random.randrange(500, 1001))
@@ -426,12 +459,13 @@ AlbonoHills = City("Albono Hills", random.randrange(250, 701))
 ZeidelBorough = City("Zeidel Borough", random.randrange(400, 951))
 
 
+
 #######################################################################
 ## MECHANICS ##
 
 citizen_queue_init = []
 citizen_id = 0
-for i in range(1000):
+for i in range(1800):
     city_prob = random.choices([MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough],
                                [3, 2, 2, 1, 2])[0]
     citizen_queue_init.append(Citizen(citizen_id, city_prob))
@@ -461,11 +495,10 @@ for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
     news_queue_init.append(Plague_inc(news_id, i))
     news_id = news_id + 1
 
-natural_disaster_init = []
-natural_id = 0
+sql_queue_init = []
 for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
-    natural_disaster_init.append(Natural_disaster(natural_id, i))
-    natural_id = natural_id + 1
+    sql_queue_init.append(SQL(i))
+
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
@@ -477,7 +510,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
             executor2.submit(personnel.zombie_destruction)
             print(f"{personnel.job, personnel.id}, is now WORKING!")
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor3:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1800) as executor3:
             for citizen in citizen_queue_init:
                 print(f"{citizen.job, citizen.id}, is now WORKING!")
                 executor3.submit(citizen.zombify)
@@ -488,18 +521,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
                     executor4.submit(news.prompts)
 
                 with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor5:
-                    for disaster in natural_disaster_init:
-                        print(f"{disaster.id} in, {disaster.city.name}, is now WORKING!")
-                        executor5.submit(disaster.disaster_function)
-# with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-#     for citizen in citizen_queue_init:
-#         executor.submit(citizen.zombify)
-#         print(f"{citizen.job, citizen.id}, is now WORKING!")
-#     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
-#         for personnel in military_queue_init:
-#             executor.submit(personnel.zombie_destruction)
-#             print(f"{personnel.job, personnel.id}, is now WORKING!")
-#         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-#             for medic in medic_queue_init:
-#                 executor.submit(medic.zombie_cure)
-#                 print(f"{medic.job, medic.id}, is now WORKING!")
+                    for query in sql_queue_init:
+                        print(f"{query.city.name} SQL records STARTED! ")
+                        executor5.submit(query.record)
+
