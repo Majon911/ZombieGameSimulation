@@ -402,6 +402,57 @@ class Plague_inc:
             traceback.print_exc()
 
 
+class Natural_disaster:
+    def __init__(self, id, city):
+        self.id = id
+        self.city = city
+        self.disaster = ['fire', 'flood', 'tornado', 'earthquake', 'epidemic']
+
+    def disaster_function(self):
+        try:
+            while True:
+                    chance = random.randint(1, 30)
+                    if chance == 30:
+                        choice_of_disaster = random.choice(self.disaster)
+                        print("Disaster: ")
+                        print("\nA", choice_of_disaster, f"has occured in {self.city.name}!")
+
+                        self.city.healthy_queue_lock.acquire()
+                        proportion = random.uniform(0, 0.15)
+                        killed = round(len(self.city.healthy_queue) * proportion)
+                        killed = random.sample(self.city.healthy_queue, killed)
+                        self.city.healthy_queue_lock.release()
+                        for died in killed:
+                            self.city.healthy_queue_lock.acquire()
+                            self.city.healthy_queue.remove(died)
+                            self.city.healthy_queue_lock.release()
+                            self.city.dead_queue_lock.acquire()
+                            self.city.dead_queue.append(died)
+                            self.city.dead_queue_lock.release()
+                        print("\n", len(killed), "citizens died in ", f"{self.city.name}")
+
+                        self.city.zombie_queue_lock.acquire()
+                        proportion = random.uniform(0, 0.15)
+                        killed = round(len(self.city.zombie_queue) * proportion)
+                        killed = random.sample(self.city.zombie_queue, killed)
+                        self.city.zombie_queue_lock.release()
+                        for died in killed:
+                            self.city.zombie_queue_lock.acquire()
+                            self.city.zombie_queue.remove(died)
+                            self.city.zombie_queue_lock.release()
+                            self.city.dead_queue_lock.acquire()
+                            self.city.dead_queue.append(died)
+                            self.city.dead_queue_lock.release()
+                        print("\n", len(killed), "zombies died in ", f"{self.city.name}")
+                        time.sleep(10)
+                    else:
+                        time.sleep(10)
+                        pass
+
+        except Exception:
+            print(Exception)
+            traceback.print_exc()
+
 
 class SQL:
     def __init__(self, city):
@@ -500,6 +551,13 @@ for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
     sql_queue_init.append(SQL(i))
 
 
+natural_disaster_init = []
+natural_id = 0
+for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
+    natural_disaster_init.append(Natural_disaster(natural_id, i))
+    natural_id = natural_id + 1
+
+
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
         executor.submit(medic.zombie_cure)
@@ -524,4 +582,9 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
                     for query in sql_queue_init:
                         print(f"{query.city.name} SQL records STARTED! ")
                         executor5.submit(query.record)
+
+                    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor6:
+                        for disaster in natural_disaster_init:
+                            print(f"Disaster {disaster.id} in, {disaster.city.name}, is now WORKING!")
+                            executor6.submit(disaster.disaster_function)
 
