@@ -499,7 +499,7 @@ class SQL:
             cnx = mysql.connector.connect(
                 host='localhost',
                 user='root',
-                passwd='HI#LEG$-Javla333',
+                passwd='ENTERYOURPASSWORD',
                 database='ZombieSimulation'
             )
 
