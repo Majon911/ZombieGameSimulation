@@ -464,7 +464,7 @@ class SQL:
             cnx = mysql.connector.connect(
                 host='localhost',
                 user='root',
-                passwd='Baumann1',
+                passwd='USE YOUR PASSWORD',
                 database='ZombieSimulation'
             )
 
@@ -485,7 +485,12 @@ class SQL:
                     civils += 1
 
             values = (time.time(), self.city.name, len(self.city.healthy_queue), len(self.city.zombie_queue),
-                      len(self.city.dead_queue), civils, military, medics )
+                      len(self.city.dead_queue), civils, military, medics)
+            if len(self.city.healthy_queue) == 0:
+                self.city.healthy_queue_lock.release()
+                self.city.zombie_queue_lock.release()
+                self.city.dead_queue_lock.release()
+                break
             self.city.healthy_queue_lock.release()
             self.city.zombie_queue_lock.release()
             self.city.dead_queue_lock.release()
@@ -497,9 +502,7 @@ class SQL:
                 self.city.healthy_queue_lock.release()
                 break
             self.city.healthy_queue_lock.release()
-            time.sleep(0.5)
-
-
+            time.sleep(0.1)
 
 
 # Creating the map / cities
@@ -508,7 +511,6 @@ GulansTown = City("Gulans Town", random.randrange(20, 201))
 NogalesVillage = City("Nogales Village", random.randrange(50, 451))
 AlbonoHills = City("Albono Hills", random.randrange(250, 701))
 ZeidelBorough = City("Zeidel Borough", random.randrange(400, 951))
-
 
 
 #######################################################################
@@ -550,7 +552,6 @@ sql_queue_init = []
 for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
     sql_queue_init.append(SQL(i))
 
-
 natural_disaster_init = []
 natural_id = 0
 for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
@@ -587,4 +588,3 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
                         for disaster in natural_disaster_init:
                             print(f"Disaster {disaster.id} in, {disaster.city.name}, is now WORKING!")
                             executor6.submit(disaster.disaster_function)
-
