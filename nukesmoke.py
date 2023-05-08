@@ -7,6 +7,7 @@ import traceback
 import mysql.connector
 import webbrowser
 
+
 class Nuke:
     def __init__(self, id, city):
         self.id = id
@@ -14,24 +15,31 @@ class Nuke:
         self.deployed = False
 
     def nuking(self):
-        while not self.deployed:
-            self.city.zombie_queue_lock.acquire()
-            self.city.healthy_queue_lock.acquire()
-            if (len(self.city.zombie_queue) / (len(self.city.zombie_queue) + len(self.city.healthy_queue))) > 0.95:
-                print(
-                    f"City: {self.city.name} is in a horrible situation, zombies make up more then 95% of the population.")
-                print("Military proposes operation Oppenheimer!")
-                for person in self.city.healthy_queue:
-                    self.city.healthy_queue.remove(person)
-                    person.alive = False
-                for zombie in self.city.zombie_queue:
-                    self.city.zombie_queue.remove(zombie)
-                    zombie.alive = False
-                webbrowser.open('https://www.youtube.com/watch?v=bryWiNw9Rzg')
-                print(f"NUCLEAR BOMB DEPLOYED IN {self.city.name}")
-            self.city.zombie_queue_lock.release()
-            self.city.healthy_queue_lock.release()
-            time.sleep(10)
+        try:
+            while not self.deployed:
+                self.city.zombie_queue_lock.acquire()
+                self.city.healthy_queue_lock.acquire()
+                self.city.dead_queue_lock.acquire()
+                if (len(self.city.zombie_queue) / (len(self.city.zombie_queue) + len(self.city.healthy_queue))) > 0.95:
+                    print(f"City: {self.city.name} is in a horrible situation, zombies make up more then 95% of the population.")
+                    print("Military proposes operation Oppenheimer!")
+
+                    self.city.dead_queue.extend(self.city.healthy_queue)
+                    self.city.dead_queue.extend(self.city.zombie_queue)
+                    self.city.healthy_queue = []
+                    self.city.zombie_queue = []
+                    for dead in self.city.dead_queue:
+                        dead.alive = False
+
+                    webbrowser.open('https://www.youtube.com/watch?v=bryWiNw9Rzg')
+                    self.deployed = True
+                    print(f"NUCLEAR BOMB DEPLOYED IN {self.city.name}")
+                self.city.zombie_queue_lock.release()
+                self.city.healthy_queue_lock.release()
+                self.city.dead_queue_lock.release()
+                time.sleep(0.5)
+        except Exception:
+            print(Exception)
 
 
 class Military:
@@ -429,6 +437,57 @@ class Plague_inc:
             traceback.print_exc()
 
 
+class Natural_disaster:
+    def __init__(self, id, city):
+        self.id = id
+        self.city = city
+        self.disaster = ['fire', 'flood', 'tornado', 'earthquake', 'epidemic']
+
+    def disaster_function(self):
+        try:
+            while True:
+                    chance = random.randint(1, 30)
+                    if chance == 30:
+                        choice_of_disaster = random.choice(self.disaster)
+                        print("Disaster: ")
+                        print("\nA", choice_of_disaster, f"has occured in {self.city.name}!")
+
+                        self.city.healthy_queue_lock.acquire()
+                        proportion = random.uniform(0, 0.15)
+                        killed = round(len(self.city.healthy_queue) * proportion)
+                        killed = random.sample(self.city.healthy_queue, killed)
+                        self.city.healthy_queue_lock.release()
+                        for died in killed:
+                            self.city.healthy_queue_lock.acquire()
+                            self.city.healthy_queue.remove(died)
+                            self.city.healthy_queue_lock.release()
+                            self.city.dead_queue_lock.acquire()
+                            self.city.dead_queue.append(died)
+                            self.city.dead_queue_lock.release()
+                        print("\n", len(killed), "citizens died in ", f"{self.city.name}")
+
+                        self.city.zombie_queue_lock.acquire()
+                        proportion = random.uniform(0, 0.15)
+                        killed = round(len(self.city.zombie_queue) * proportion)
+                        killed = random.sample(self.city.zombie_queue, killed)
+                        self.city.zombie_queue_lock.release()
+                        for died in killed:
+                            self.city.zombie_queue_lock.acquire()
+                            self.city.zombie_queue.remove(died)
+                            self.city.zombie_queue_lock.release()
+                            self.city.dead_queue_lock.acquire()
+                            self.city.dead_queue.append(died)
+                            self.city.dead_queue_lock.release()
+                        print("\n", len(killed), "zombies died in ", f"{self.city.name}")
+                        time.sleep(10)
+                    else:
+                        time.sleep(10)
+                        pass
+
+        except Exception:
+            print(Exception)
+            traceback.print_exc()
+
 
 class SQL:
     def __init__(self, city):
@@ -440,7 +499,7 @@ class SQL:
             cnx = mysql.connector.connect(
                 host='localhost',
                 user='root',
-                passwd='Baumann1',
+                passwd='HI#LEG$-Javla333',
                 database='ZombieSimulation'
             )
 
@@ -461,7 +520,12 @@ class SQL:
                     civils += 1
 
             values = (time.time(), self.city.name, len(self.city.healthy_queue), len(self.city.zombie_queue),
-                      len(self.city.dead_queue), civils, military, medics )
+                      len(self.city.dead_queue), civils, military, medics)
+            if len(self.city.healthy_queue) == 0:
+                self.city.healthy_queue_lock.release()
+                self.city.zombie_queue_lock.release()
+                self.city.dead_queue_lock.release()
+                break
             self.city.healthy_queue_lock.release()
             self.city.zombie_queue_lock.release()
             self.city.dead_queue_lock.release()
@@ -473,9 +537,7 @@ class SQL:
                 self.city.healthy_queue_lock.release()
                 break
             self.city.healthy_queue_lock.release()
-            time.sleep(0.5)
-
-
+            time.sleep(0.1)
 
 
 # Creating the map / cities
@@ -484,7 +546,6 @@ GulansTown = City("Gulans Town", random.randrange(20, 201))
 NogalesVillage = City("Nogales Village", random.randrange(50, 451))
 AlbonoHills = City("Albono Hills", random.randrange(250, 701))
 ZeidelBorough = City("Zeidel Borough", random.randrange(400, 951))
-
 
 
 #######################################################################
@@ -526,12 +587,17 @@ sql_queue_init = []
 for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
     sql_queue_init.append(SQL(i))
 
+natural_disaster_init = []
+natural_id = 0
+for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
+    natural_disaster_init.append(Natural_disaster(natural_id, i))
+    natural_id = natural_id + 1
+
 nuke_queue_init = []
 nuke_id = 0
 for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
     nuke_queue_init.append(Nuke(nuke_id, i))
     nuke_id = nuke_id + 1
-
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
@@ -559,6 +625,11 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
                         executor5.submit(query.record)
 
                     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor6:
-                        for smoked in nuke_queue_init:
-                            print(f"Nuke thread nr: {smoked.id}, started in city: {smoked.city.name}! ")
-                            executor6.submit(query.record)
+                        for disaster in natural_disaster_init:
+                            print(f"Disaster {disaster.id} in, {disaster.city.name}, is now WORKING!")
+                            executor6.submit(disaster.disaster_function)
+
+                        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor7:
+                            for smoked in nuke_queue_init:
+                                print(f"Nuke thread nr: {smoked.id}, started in city: {smoked.city.name}! ")
+                                executor7.submit(smoked.nuking)
