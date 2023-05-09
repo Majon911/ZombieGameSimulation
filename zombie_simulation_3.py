@@ -4,8 +4,7 @@ import time
 import random
 import concurrent.futures
 import traceback
-import mysql.connector #
-
+import mysql.connector
 
 class Military:
     def __init__(self, id, type, rank, city_name):
@@ -297,6 +296,39 @@ class Medic:
             print(e)
 
 
+class Contamination:
+    def __init__(self, id, cities):
+        self.id = id
+        self.cities = cities
+
+    def check_contamination(self):
+        while True:
+            try:
+                if random.random() < 0.05:
+                    print(f"Alert: {self.cities.name} has been contaminated due to the fires and gases!")
+                    n_of_ppl = random.randrange(1, 10)
+                    for i in range(n_of_ppl):
+                        self.cities.healthy_queue_lock.acquire()
+                        citizen = random.choice(self.cities.healthy_queue)
+                        self.cities.healthy_queue_lock.release()
+                        citizen.alive = False
+                        self.cities.dead_queue_lock.acquire()
+                        self.cities.dead_queue.append(citizen)
+                        self.cities.dead_queue_lock.release()
+                        time.sleep(0.5)
+                    if n_of_ppl > 0:
+                        print(f"Simulation: {int(n_of_ppl)} people have died in {self.cities.name} due to contamination.")
+                    self.cities.healthy_queue_lock.acquire()
+                    if n_of_ppl > 0.2 * len(self.cities.healthy_queue):
+                        print(f"Alert: {self.cities.name} has lost more than 10% of its population due to contamination!")
+                    self.cities.healthy_queue_lock.release()
+                else:
+                    time.sleep(2)
+
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+
 class City:
     def __init__(self, name, population):
         self.name = name
@@ -464,7 +496,7 @@ class SQL:
             cnx = mysql.connector.connect(
                 host='localhost',
                 user='root',
-                passwd='USE YOUR PASSWORD',
+                passwd='ILOVEBOOBIES',
                 database='ZombieSimulation'
             )
 
@@ -558,6 +590,12 @@ for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
     natural_disaster_init.append(Natural_disaster(natural_id, i))
     natural_id = natural_id + 1
 
+contamination_init = []
+contamination_id = 0
+for i in [MackersCity, GulansTown, NogalesVillage, AlbonoHills, ZeidelBorough]:
+    contamination_init.append(Contamination(contamination_id, i))
+    natural_id = natural_id + 1
+
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
     for medic in medic_queue_init:
@@ -588,3 +626,8 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
                         for disaster in natural_disaster_init:
                             print(f"Disaster {disaster.id} in, {disaster.city.name}, is now WORKING!")
                             executor6.submit(disaster.disaster_function)
+
+                        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor7:
+                            for j in contamination_init:
+                                print(f"Contamination function {j.id} in, {j.cities.name}, is now WORKING!")
+                                executor7.submit(j.check_contamination)
