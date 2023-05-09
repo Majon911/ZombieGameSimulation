@@ -5,6 +5,42 @@ import random
 import concurrent.futures
 import traceback
 import mysql.connector
+import webbrowser
+
+
+class Nuke:
+    def __init__(self, id, city):
+        self.id = id
+        self.city = city
+        self.deployed = False
+
+    def nuking(self):
+        try:
+            while not self.deployed:
+                self.city.zombie_queue_lock.acquire()
+                self.city.healthy_queue_lock.acquire()
+                self.city.dead_queue_lock.acquire()
+                if (len(self.city.zombie_queue) / (len(self.city.zombie_queue) + len(self.city.healthy_queue))) > 0.95:
+                    print(f"City: {self.city.name} is in a horrible situation, zombies make up more then 95% of the population.")
+                    print("Military proposes operation Oppenheimer!")
+
+                    self.city.dead_queue.extend(self.city.healthy_queue)
+                    self.city.dead_queue.extend(self.city.zombie_queue)
+                    self.city.healthy_queue = []
+                    self.city.zombie_queue = []
+                    for dead in self.city.dead_queue:
+                        dead.alive = False
+
+                    webbrowser.open('https://www.youtube.com/watch?v=bryWiNw9Rzg')
+                    self.deployed = True
+                    print(f"NUCLEAR BOMB DEPLOYED IN {self.city.name}")
+                self.city.zombie_queue_lock.release()
+                self.city.healthy_queue_lock.release()
+                self.city.dead_queue_lock.release()
+                time.sleep(0.5)
+        except Exception:
+            print(Exception)
+
 
 class Military:
     def __init__(self, id, type, rank, city_name):
